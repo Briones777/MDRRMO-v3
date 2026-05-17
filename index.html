@@ -699,7 +699,10 @@
         <h2>Environmental Monitoring</h2>
         <div class="ssub">Live data · Rosario, Cavite (14.416°N, 120.850°E)</div>
       </div>
-      <div class="sright" id="env-updated">Fetching…</div>
+      <div class="sright" style="display:flex;align-items:center;gap:8px;">
+        <span id="env-updated" style="font-size:10px;color:var(--t-dim)">Fetching live data…</span>
+        <button onclick="init()" style="font-size:9px;padding:3px 8px;border-radius:2px;background:rgba(52,208,88,.12);border:1px solid var(--border-mid);color:var(--g2);cursor:pointer;font-family:inherit;font-weight:700;text-transform:uppercase;letter-spacing:.06em;">↺ Refresh</button>
+      </div>
     </div>
 
     <div class="env-grid">
@@ -1170,58 +1173,344 @@
 </footer>
 
 <script>
-  function updateClock() {
-    const now = new Date();
-    const opts = { weekday:'short', year:'numeric', month:'short', day:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false };
-    document.getElementById('clock').textContent = now.toLocaleString('en-PH', opts);
-    const ts = now.toLocaleString('en-PH', { month:'short', day:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit', hour12:false });
-    const itEl = document.getElementById('incident-time');
-    if(itEl) itEl.textContent = 'As of ' + ts;
-    const eu = document.getElementById('env-updated');
-    if(eu) eu.textContent = 'Updated ' + now.toLocaleTimeString('en-PH', {hour:'2-digit', minute:'2-digit', hour12:false});
+/* ═══════════════════════════════════════════════════════════════
+   MDRRMO ROSARIO CAVITE — Live Environmental Data
+   Sources:
+     Weather  → Open-Meteo (ECMWF, same model PAGASA uses)
+     AQI      → Open-Meteo Air Quality API
+     Thresholds → PAGASA official heat index & rainfall warnings
+   Coords: Rosario, Cavite  14.416°N, 120.850°E
+═══════════════════════════════════════════════════════════════ */
+
+const LAT = 14.416, LON = 120.850;
+
+/* ── CLOCK ─────────────────────────────────────────────────── */
+function tick() {
+  const n = new Date();
+  const el = document.getElementById('clock');
+  if (el) el.textContent = n.toLocaleString('en-PH', {
+    weekday:'short', year:'numeric', month:'short',
+    day:'2-digit', hour:'2-digit', minute:'2-digit',
+    second:'2-digit', hour12: false
+  });
+  const it = document.getElementById('incident-time');
+  if (it) it.textContent = 'As of ' + n.toLocaleString('en-PH', {
+    month:'short', day:'2-digit', year:'numeric',
+    hour:'2-digit', minute:'2-digit', hour12: false
+  });
+}
+tick();
+setInterval(tick, 1000);
+
+/* ── MAP TABS ───────────────────────────────────────────────── */
+document.querySelectorAll('.mtab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.mtab').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    const ov = t.dataset.ov || 'rain';
+    const fr = document.querySelector('.mframe');
+    if (fr) fr.src = `https://embed.windy.com/embed2.html?lat=${LAT}&lon=${LON}&zoom=9&overlay=${ov}`;
+  });
+});
+
+/* ── FIRST AID ──────────────────────────────────────────────── */
+const FA = {
+  DRSABC:'<b>D</b>anger → <b>R</b>esponse → <b>S</b>end help (911) → <b>A</b>irway → <b>B</b>reathing → <b>C</b>PR. Check scene safety first.',
+  Fainting:'1. Lay flat. 2. Elevate legs ~30 cm. 3. Loosen tight clothing. 4. Do NOT give water until fully conscious. 5. Call RHU Rosario if unresponsive.',
+  Bleeding:'1. Apply firm direct pressure. 2. Do not remove soaked cloth — add more. 3. Elevate limb. 4. Call MDRRMO if severe.',
+  Burn:'1. Cool under running water 10–20 min. 2. No ice, toothpaste, or butter. 3. Sterile bandage. 4. Seek RHU Rosario for burns >3 cm.',
+  HeatExhaustion:'1. Move to cool shaded area. 2. Remove excess clothing. 3. Cool damp cloths on skin. 4. Give water if conscious. 5. Call MDRRMO if worsens.',
+  Choking:'1. Encourage strong coughing. 2. 5 firm back blows. 3. 5 abdominal thrusts (Heimlich). 4. Repeat. 5. Call 911.',
+  Fracture:'1. Immobilize — do NOT realign. 2. Splint if available. 3. Ice pack. 4. Transport to RHU Rosario.',
+  FoodPoisoning:'1. Keep hydrated. 2. Rest. 3. Avoid solids initially. 4. RHU if vomiting >24 hrs or dehydration.',
+  Electrocuted:'1. Do NOT touch victim. 2. Disconnect power safely. 3. Call 911. 4. CPR if not breathing.',
+  Stroke:'<b>FAST:</b> Face drooping? Arm weak? Speech slurred? Time — call 911 NOW. Note exact time symptoms started.',
+  Seizure:'1. Clear hazards. 2. Cushion head. 3. Do NOT restrain. 4. Turn on side after seizure. 5. Call 911 if >5 minutes.',
+  Drowned:'1. Remove from water safely. 2. Check breathing. 3. CPR if not breathing. 4. Call 911. 5. Keep warm.'
+};
+const faOut = document.getElementById('fa-out');
+document.querySelectorAll('.fa-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.fa-btn').forEach(b => b.classList.remove('sel'));
+    btn.classList.add('sel');
+    const k = btn.dataset.key;
+    if (faOut) {
+      faOut.style.display = 'block';
+      faOut.innerHTML = `<strong style="color:var(--g1)">${k.replace(/([A-Z])/g,' $1').trim()}:</strong> ${FA[k]||'Refer to a trained responder.'}`;
+    }
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════════
+   HEAT INDEX — PAGASA / Steadman formula
+   Valid for temp ≥ 27°C, RH ≥ 40%
+═══════════════════════════════════════════════════════════════ */
+function heatIndex(T, RH) {
+  if (T < 27) return T;
+  const hi =
+    -8.78469475556
+    + 1.61139411  * T
+    + 2.33854883889 * RH
+    - 0.14611605  * T  * RH
+    - 0.012308094 * T  * T
+    - 0.0164248277778 * RH * RH
+    + 0.002211732 * T  * T  * RH
+    + 0.00072546  * T  * RH * RH
+    - 0.000003582 * T  * T  * RH * RH;
+  return Math.round(hi * 10) / 10;
+}
+
+function hiCategory(hi) {
+  /* PAGASA thresholds */
+  if (hi <= 27) return { cls:'pill-safe',    label:'Safe',           color:'var(--g1)',  warn:'✅ Conditions safe. Stay hydrated and enjoy normal activities.' };
+  if (hi <= 32) return { cls:'pill-caution', label:'Caution',        color:'var(--amber)',warn:'⚠ Fatigue possible with prolonged exposure. Drink water regularly.' };
+  if (hi <= 41) return { cls:'pill-danger',  label:'Danger',         color:'var(--red)', warn:'🔴 Heat cramps and exhaustion likely. Limit outdoor activities 10AM–4PM. Drink water frequently. PAGASA advisory for Rosario, Cavite.' };
+  return           { cls:'pill-extreme', label:'Extreme Danger',  color:'var(--red)', warn:'🚨 Heatstroke imminent. Stay indoors. Wet cloth on neck/wrists. Call MDRRMO Rosario: 0912-345-6789.' };
+}
+
+function uvLabel(u) {
+  if (u <=  2) return `UV ${u} — Low`;
+  if (u <=  5) return `UV ${u} — Moderate`;
+  if (u <=  7) return `UV ${u} — High`;
+  if (u <= 10) return `UV ${u} — Very High`;
+  return               `UV ${u} — Extreme`;
+}
+function windDir(deg) {
+  return ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'][Math.round(deg/22.5)%16];
+}
+
+/* ── AQI from PM2.5 (US EPA breakpoints) ────────────────────── */
+function aqiFromPm25(c) {
+  const bp = [[0,12,0,50],[12.1,35.4,51,100],[35.5,55.4,101,150],
+              [55.5,150.4,151,200],[150.5,250.4,201,300],[250.5,500.4,301,500]];
+  for (const [lo,hi,alo,ahi] of bp)
+    if (c >= lo && c <= hi) return Math.round(((ahi-alo)/(hi-lo))*(c-lo)+alo);
+  return Math.min(500, Math.round(c * 2));
+}
+function aqiCategory(aqi) {
+  if (aqi <=  50) return { cls:'aqi-good',     label:'Good',              arc:'#34d058' };
+  if (aqi <= 100) return { cls:'aqi-moderate', label:'Moderate',          arc:'#fbbf24' };
+  if (aqi <= 150) return { cls:'aqi-usg',      label:'Unhealthy — Sensitive Groups', arc:'#fb923c' };
+  if (aqi <= 200) return { cls:'aqi-moderate', label:'Unhealthy',         arc:'#ef4444' };
+  return                  { cls:'aqi-usg',     label:'Very Unhealthy',    arc:'#7f1d1d' };
+}
+function barPct(v, max)  { return Math.min(100, Math.round(v / max * 100)); }
+function barColor(pct)   { return pct < 35 ? 'var(--g1)' : pct < 65 ? 'var(--amber)' : 'var(--red)'; }
+
+/* ── PAGASA alert rows ───────────────────────────────────────── */
+function pagasaRows(rain, wind, hi, aqi) {
+  const rows = [
+    { label:'Rainfall Warning',  cls: rain > 7.5 ? 'pa' : 'pg', status: rain > 7.5 ? 'Yellow Alert' : 'No Warning' },
+    { label:'Heat Index',        cls: hi > 41 ? 'pr' : hi > 32 ? 'pa' : 'pg', status: hi > 41 ? 'Extreme Danger' : hi > 32 ? 'Caution Level' : 'Normal' },
+    { label:'Wind Condition',    cls: wind > 62 ? 'pa' : 'pg',  status: wind > 62 ? 'Moderate Breeze' : 'Normal' },
+    { label:'Storm Signal',      cls: 'pg', status: 'No Signal' },
+    { label:'Air Quality (AQI)', cls: aqi > 150 ? 'pr' : aqi > 100 ? 'pa' : 'pg', status: aqi > 150 ? 'Unhealthy' : aqi > 100 ? 'Moderate' : 'Good' },
+    { label:'Flood Risk',        cls: rain > 7.5 ? 'pa' : 'pg', status: rain > 7.5 ? 'Moderate' : 'Low' },
+  ];
+  const el = document.getElementById('pag-list');
+  if (el) el.innerHTML = rows.map(r =>
+    `<div class="pag-row ${r.cls}"><span class="prt">${r.label}</span><span class="prs">${r.status}</span></div>`
+  ).join('');
+}
+
+/* ── ALERT STRIP ─────────────────────────────────────────────── */
+function setAlertStrip(hi, aqi) {
+  const strip = document.querySelector('.alert-strip');
+  const badge = strip?.querySelector('.al-badge');
+  const text  = strip?.querySelector('.al-text') || document.getElementById('alert-text');
+  if (!strip || !text) return;
+
+  if (hi > 41) {
+    strip.style.background = 'rgba(239,68,68,.1)';
+    strip.style.borderBottomColor = 'rgba(239,68,68,.3)';
+    if (badge) { badge.style.background = 'var(--red)'; badge.textContent = 'EXTREME DANGER'; }
+    text.style.color = 'var(--red)';
+    text.textContent = `🚨 Heat index ${hi}°C in Rosario, Cavite — Extreme danger. Risk of heatstroke. Stay indoors. Call MDRRMO: 0912-345-6789.`;
+  } else if (hi > 32) {
+    strip.style.background = 'rgba(251,191,36,.07)';
+    if (badge) { badge.style.background = 'var(--amber)'; badge.textContent = 'Advisory'; }
+    text.style.color = 'var(--amber)';
+    text.textContent = `⚠ Heat index ${hi}°C — PAGASA Danger level in Rosario, Cavite. Limit outdoor exposure 10AM–4PM. Drink water frequently.`;
+  } else if (aqi > 100) {
+    if (badge) badge.textContent = 'AQI Alert';
+    text.textContent = `💨 Air quality is ${aqi > 150 ? 'Unhealthy' : 'Moderate'} in Rosario, Cavite (AQI ${aqi}). Sensitive groups should limit outdoor activities.`;
+  } else {
+    strip.style.background = 'rgba(52,208,88,.05)';
+    strip.style.borderBottomColor = 'rgba(52,208,88,.15)';
+    if (badge) { badge.style.background = 'var(--g1)'; badge.style.color = 'var(--bg1)'; badge.textContent = 'Normal'; }
+    text.style.color = 'var(--g3)';
+    text.textContent = `✅ Conditions normal — Rosario, Cavite. Heat index ${hi}°C · AQI ${aqi}. Stay prepared.`;
   }
-  updateClock();
-  setInterval(updateClock, 1000);
+}
 
-  // Map tab switching
-  const tabs = document.querySelectorAll('.map-tab');
-  const frame = document.querySelector('.map-frame');
-  const overlays = { Rain:'rain', Wind:'wind', Satellite:'satellite' };
-  tabs.forEach(t => {
-    t.addEventListener('click', () => {
-      tabs.forEach(x => x.classList.remove('active'));
-      t.classList.add('active');
-      const ov = overlays[t.textContent.trim()] || 'rain';
-      frame.src = `https://embed.windy.com/embed2.html?lat=14.350&lon=120.388&zoom=6&overlay=${ov}`;
-    });
-  });
+/* ═══════════════════════════════════════════════════════════════
+   FETCH WEATHER — Open-Meteo (ECMWF, same model PAGASA uses)
+   https://open-meteo.com/en/docs
+   No API key needed · Free · Updated hourly
+═══════════════════════════════════════════════════════════════ */
+async function fetchWeather() {
+  const url = `https://api.open-meteo.com/v1/forecast?` +
+    `latitude=${LAT}&longitude=${LON}` +
+    `&current=temperature_2m,relative_humidity_2m,apparent_temperature,` +
+    `wind_speed_10m,wind_direction_10m,surface_pressure,precipitation,` +
+    `uv_index,weather_code,cloud_cover` +
+    `&timezone=Asia%2FManila` +
+    `&wind_speed_unit=kmh`;
+  setStatus('⏳ Fetching live weather data…');
+  try {
+    const res  = await fetch(url, { mode: 'cors', cache: 'no-cache' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (!data.current) throw new Error('No current data in response');
+    setStatus('✅ Live data loaded');
+    const c    = data.current;
 
-  // First aid buttons
-  const faGuide = {
-    'DRSABC': 'Danger → Response → Send for help → Airway → Breathing → CPR/Compression. Check scene safety first. Call 911.',
-    'Fainting': '1. Lay person flat. 2. Elevate legs 30cm. 3. Loosen tight clothing. 4. Do not give water until fully conscious. 5. Monitor breathing.',
-    'Bleeding': '1. Apply firm direct pressure with clean cloth. 2. Do not remove cloth — add more if soaked. 3. Elevate injured limb. 4. Seek medical help if severe.',
-    'Burn': '1. Cool under running water 10–20 minutes. 2. Do NOT use ice, toothpaste, or butter. 3. Cover loosely with sterile bandage. 4. Seek medical attention for burns >3cm.',
-    'Heat Exhaustion': '1. Move to cool, shaded area. 2. Remove excess clothing. 3. Apply cool wet cloths to skin. 4. Give water to drink if conscious. 5. Call for help if symptoms worsen.',
-    'Choking': '1. Encourage coughing. 2. Give 5 firm back blows between shoulder blades. 3. Give 5 abdominal thrusts (Heimlich). 4. Repeat until object expelled or emergency help arrives.',
-    'Fracture': '1. Immobilize the injured area — do not move it. 2. Apply splint if available. 3. Ice pack to reduce swelling. 4. Seek medical attention immediately.',
-    'Food Poisoning': '1. Ensure adequate hydration. 2. Rest. 3. Avoid solid food initially. 4. Seek medical help if vomiting persists >24 hrs or signs of dehydration appear.',
-    'Electrocuted': '1. DO NOT touch the victim directly. 2. Disconnect power source safely. 3. Call 911. 4. Begin CPR if person is unresponsive and not breathing.',
-    'Stroke': 'Use FAST: Face drooping? Arm weakness? Speech difficulty? Time to call 911 immediately. Do not give food or water. Note time symptoms started.',
-    'Seizure': '1. Clear area of hazards. 2. Cushion the head. 3. Do NOT restrain. 4. Turn on side when seizure ends. 5. Call 911 if seizure lasts >5 minutes.',
-    'Drowned': '1. Remove from water safely. 2. Check responsiveness and breathing. 3. Begin CPR if not breathing. 4. Call 911. 5. Keep warm until help arrives.'
-  };
-  const faOut = document.getElementById('fa-out');
-  document.querySelectorAll('.fa-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const key = btn.textContent.replace(/[\u{1F000}-\u{1FFFF}]/gu,'').trim();
-      const match = Object.keys(faGuide).find(k => key.toLowerCase().includes(k.toLowerCase()) || k.toLowerCase().includes(key.toLowerCase()));
-      if(match) {
-        faOut.style.display = 'block';
-        faOut.innerHTML = '<strong style="color:#4ade80;">' + match + ':</strong> ' + faGuide[match];
-      }
-    });
-  });
+    const T    = Math.round(c.temperature_2m * 10) / 10;
+    const RH   = Math.round(c.relative_humidity_2m);
+    const wind = Math.round(c.wind_speed_10m);
+    const wdir = windDir(c.wind_direction_10m);
+    const pres = Math.round(c.surface_pressure);
+    const rain = Math.round(c.precipitation * 10) / 10;
+    const uv   = Math.round(c.uv_index || 0);
+    const hi   = heatIndex(T, RH);
+    const cat  = hiCategory(hi);
+
+    /* Heat Index card */
+    const hv = document.getElementById('hi-val');
+    if (hv) { hv.textContent = hi; hv.style.color = cat.color; }
+    setText('hi-feels', `Feels like ${hi}°C · Actual ${T}°C — Rosario, Cavite`);
+    const pill = document.getElementById('hi-pill');
+    if (pill) { pill.textContent = cat.label; pill.className = `hi-pill ${cat.cls}`; }
+    setText('hi-temp',  `${T}°C`);
+    setText('hi-rh',    `${RH}%`);
+    setText('hi-wind',  `${wind} km/h ${wdir}`);
+    setText('hi-uv',    uvLabel(uv));
+    setText('hi-warn',  cat.warn);
+
+    /* PAGASA panel */
+    setText('pag-rain',   `${rain} mm`);
+    setText('pag-wind',   `${wind} km/h`);
+    setText('pag-wdir',   `${wdir} direction`);
+    setText('pag-pres',   `${pres} hPa`);
+    setText('pag-pres-s', pres > 1013 ? '↑ stable' : '↓ falling');
+
+    /* Timestamp */
+    const now = new Date();
+    const ts  = now.toLocaleTimeString('en-PH', {hour:'2-digit', minute:'2-digit', hour12:true});
+    setText('env-updated', `Updated ${ts} PHT · Open-Meteo / ECMWF`);
+
+    return { rain, wind, hi, T, RH };
+  } catch(e) {
+    console.error('Weather fetch error:', e);
+    setStatus('❌ Weather fetch failed: ' + e.message);
+    setText('hi-feels', '⚠ Live data unavailable — retrying in 60s');
+    setText('hi-warn',  '📡 Check: open-meteo.com · Coords: 14.416°N 120.850°E (Rosario, Cavite)');
+    return null;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FETCH AIR QUALITY — Open-Meteo Air Quality API
+   https://open-meteo.com/en/docs/air-quality-api
+   PM2.5, PM10, CO, NO₂, SO₂, Ozone
+═══════════════════════════════════════════════════════════════ */
+async function fetchAQI() {
+  const url = `https://air-quality-api.open-meteo.com/v1/air-quality?` +
+    `latitude=${LAT}&longitude=${LON}` +
+    `&current=pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone` +
+    `&timezone=Asia%2FManila`;
+  try {
+    const res  = await fetch(url, { mode: 'cors', cache: 'no-cache' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const c    = data.current;
+
+    const pm25 = Math.round(c.pm2_5  * 10) / 10;
+    const pm10 = Math.round(c.pm10   * 10) / 10;
+    const co   = Math.round(c.carbon_monoxide    * 10) / 10;
+    const o3   = Math.round(c.ozone              * 10) / 10;
+    const no2  = Math.round(c.nitrogen_dioxide   * 10) / 10;
+    const so2  = Math.round(c.sulphur_dioxide    * 10) / 10;
+    const aqi  = aqiFromPm25(pm25);
+    const cat  = aqiCategory(aqi);
+
+    /* Ring gauge */
+    const arc = document.getElementById('aqi-arc');
+    if (arc) {
+      const dash = Math.min(301.6, (aqi / 500) * 301.6);
+      arc.setAttribute('stroke-dashoffset', 301.6 - dash);
+      arc.setAttribute('stroke', cat.arc);
+    }
+    setText('aqi-num', aqi);
+    const ap = document.getElementById('aqi-pill');
+    if (ap) { ap.textContent = cat.label; ap.className = `aqi-pill ${cat.cls}`; }
+
+    /* Pollutant bars */
+    setBar('pm25', pm25,  75,  `${pm25} µg/m³`);
+    setBar('pm10', pm10,  150, `${pm10} µg/m³`);
+    setBar('co',   co,    1000,`${co} ppb`);
+    setBar('o3',   o3,    180, `${o3} µg/m³`);
+    setBar('no2',  no2,   200, `${no2} µg/m³`);
+    setBar('so2',  so2,   350, `${so2} µg/m³`);
+
+    return aqi;
+  } catch(e) {
+    console.error('AQI fetch error:', e);
+    setText('aqi-num', '—');
+    setText('aqi-pill','Data unavailable');
+    return null;
+  }
+}
+
+/* ── Helpers ─────────────────────────────────────────────────── */
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+function setBar(prefix, val, max, label) {
+  const pv  = document.getElementById(prefix);
+  const bar = document.getElementById(prefix + '-bar');
+  if (pv)  pv.textContent  = label;
+  if (bar) {
+    const p = barPct(val, max);
+    bar.style.width       = p + '%';
+    bar.style.background  = barColor(p);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   INIT — fetch on load, refresh every 10 minutes
+═══════════════════════════════════════════════════════════════ */
+/* ── Status helper ── */
+function setStatus(msg) {
+  const el = document.getElementById('env-updated');
+  if (el) el.textContent = msg;
+}
+
+async function init() {
+  const [wx, aqi] = await Promise.all([fetchWeather(), fetchAQI()]);
+  if (wx && aqi !== null) {
+    pagasaRows(wx.rain, wx.wind, wx.hi, aqi);
+    setAlertStrip(wx.hi, aqi);
+  }
+  /* Hide loading bar */
+  setTimeout(() => {
+    const lb = document.getElementById('lbar');
+    if (lb) lb.style.opacity = '0';
+  }, 2000);
+}
+
+init();
+setInterval(init, 10 * 60 * 1000); /* refresh every 10 min */
+
+/* Retry after 60s if initial load failed */
+setTimeout(async () => {
+  const hiVal = document.getElementById('hi-val');
+  if (hiVal && hiVal.textContent === '—') {
+    console.log('Retrying weather fetch…');
+    init();
+  }
+}, 60000);
 </script>
 </body>
 </html>
