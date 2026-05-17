@@ -7,837 +7,586 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
+  /* ═══════════════════════════════════════
+     MDRRMO ROSARIO — DARK GREEN THEME
+     WCAG AA accessible contrast ratios
+  ═══════════════════════════════════════ */
   :root {
-    --gov-navy: #0b1f0f;
-    --gov-navy-mid: #122a17;
-    --gov-navy-light: #1a4a24;
-    --gov-gold: #4ade80;
-    --gov-gold-light: #86efac;
-    --gov-red: #9b1c1c;
-    --gov-red-light: #dc2626;
-    --gov-green: #14532d;
-    --gov-green-light: #16a34a;
-    --gov-amber: #78350f;
-    --gov-amber-light: #d97706;
-    --gov-gray-100: #122a17;
-    --gov-gray-200: #1a3826;
-    --gov-gray-400: #9ca3af;
-    --gov-gray-600: #4b5563;
-    --gov-gray-800: #1f2937;
-    --text: #e2ffe9;
-    --text-muted: #7aab8a;
-    --border: #1f4a30;
-    --surface: #0b1a12;
-    --white: #0d1f12;
+    /* Backgrounds — layered dark greens */
+    --bg0: #070f09;
+    --bg1: #0a1a0d;
+    --bg2: #0d2112;
+    --bg3: #102817;
+    --bg4: #163320;
+
+    /* Borders */
+    --border-dim:  #1a3d24;
+    --border-mid:  #245c35;
+    --border-bright: #2e7a46;
+
+    /* Green accent scale — high contrast on dark */
+    --g1: #34d058;   /* bright — primary CTA, values  ≥7:1 on bg1 */
+    --g2: #5eea7b;   /* medium — labels               ≥6:1 on bg2 */
+    --g3: #9efdb5;   /* light  — muted text            ≥4.5:1 on bg2 */
+    --g4: #c8ffd8;   /* very light — body text on dark ≥7:1 on bg1 */
+
+    /* Status colors — accessible */
+    --red:   #f87171;   /* danger  */
+    --amber: #fbbf24;   /* warning */
+    --sky:   #67e8f9;   /* info (no blue — cyan-green) */
+    --gold:  #fde68a;   /* highlight */
+
+    /* Typography */
+    --t-primary:  #e8fff0;   /* headings  ≥10:1 on dark bg */
+    --t-body:     #c8f0d5;   /* body text ≥7:1  */
+    --t-muted:    #7ec99a;   /* labels    ≥4.5:1 */
+    --t-dim:      #4d9166;   /* placeholders ≥3:1 */
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* ── RESET ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  img  { max-width: 100%; display: block; }
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg1); }
+  ::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 3px; }
 
+  /* ── BASE TYPOGRAPHY ── */
   body {
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 14px;
-    color: var(--text);
-    background: var(--surface);
-    line-height: 1.6;
+    font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+    font-size: 15px;            /* base 15px — easier to read */
+    line-height: 1.65;
+    color: var(--t-body);
+    background: var(--bg1);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1,h2,h3,h4,h5,h6 { color: var(--t-primary); font-weight: 700; line-height: 1.25; }
+  p { color: var(--t-body); }
+  a { color: var(--g2); }
+  a:hover { color: var(--g1); }
+  strong { color: var(--t-primary); }
+
+  /* ── LOADING BAR ── */
+  .loading-bar {
+    position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 9999;
+    background: linear-gradient(90deg, var(--g1), var(--g2));
+    animation: loadbar 1.8s ease forwards;
+  }
+  @keyframes loadbar {
+    from { transform: scaleX(0); transform-origin: left; }
+    to   { transform: scaleX(1); transform-origin: left; }
   }
 
-  /* ── TOP BANNER ── */
-  .top-banner {
-    background: var(--gov-navy);
-    color: rgba(255,255,255,0.75);
-    font-size: 11px;
-    letter-spacing: 0.04em;
-    padding: 6px 0;
-    border-bottom: 1px solid var(--gov-gold);
+  /* ── TOP STRIP ── */
+  .top-strip {
+    background: var(--bg0);
+    border-bottom: 1px solid var(--border-dim);
+    padding: 5px 0;
   }
-  .top-banner .inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .top-strip .inner {
+    max-width: 1280px; margin: 0 auto; padding: 0 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 4px;
   }
-  .top-banner span { text-transform: uppercase; }
-  .top-banner .clock { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--gov-gold); }
+  .top-strip .rep {
+    font-size: 10px; text-transform: uppercase; letter-spacing: .1em;
+    color: var(--t-dim);
+  }
+  .top-strip .clock {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; font-weight: 600; color: var(--g1);
+  }
 
-  /* ── HEADER ── */
+  /* ══════════════════════════════
+     HEADER — responsive, fixed
+  ══════════════════════════════ */
   header {
-    background: var(--gov-navy);
-    padding: 20px 0;
-    border-bottom: 3px solid var(--gov-gold);
+    background: var(--bg2);
+    border-bottom: 2px solid var(--g1);
+    padding: 14px 0;
   }
   .header-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
+    max-width: 1280px; margin: 0 auto; padding: 0 20px;
+    display: flex; align-items: center; gap: 14px;
+    flex-wrap: nowrap;
   }
-  .logo-block {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+
+  /* Seals — perfectly circular on every device */
+  .seal-wrap {
+    flex-shrink: 0;
+    width: 64px; height: 64px;     /* fixed square bounding box */
   }
-  .logo-seal {
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    background: #0d1f12;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .seal-wrap .seal-circle {
+    width: 64px; height: 64px;
+    border-radius: 50%;             /* always 50% of equal w/h = circle */
+    background: var(--bg3);
+    border: 2px solid var(--g1);
+    display: flex; align-items: center; justify-content: center;
     overflow: hidden;
-    border: 3px solid var(--gov-gold);
+  }
+  .seal-wrap .seal-circle.secondary {
+    border-color: var(--border-bright);
+    width: 54px; height: 54px;
+    margin: 5px auto 5px;           /* center inside 64px bounding box */
+  }
+  .seal-wrap .seal-circle img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    border-radius: 0;               /* img itself not rounded — container clips it */
+  }
+
+  .hdr-divider {
+    width: 1px; height: 52px;
+    background: var(--border-dim);
     flex-shrink: 0;
   }
-  .logo-seal img { width: 64px; height: 64px; object-fit: contain; }
-  .logo-text h1 {
-    font-family: 'Source Serif 4', serif;
-    font-size: 22px;
+
+  /* Title block */
+  .hdr-title { flex: 1; min-width: 0; }
+  .hdr-title h1 {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: clamp(15px, 2.2vw, 22px);   /* fluid, never overflows */
     font-weight: 700;
-    color: var(--white);
-    letter-spacing: 0.01em;
+    color: var(--t-primary);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    letter-spacing: .01em;
   }
-  .logo-text .subtitle {
-    font-size: 11px;
-    color: var(--gov-gold-light);
-    letter-spacing: 0.08em;
+  .hdr-title .sub {
+    font-size: clamp(9px, 1.1vw, 11px);
+    color: var(--g3);
+    letter-spacing: .08em;
     text-transform: uppercase;
     margin-top: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .logo-text .tagline {
+  .hdr-title .tag {
     font-size: 11px;
-    color: rgba(255,255,255,0.55);
+    color: var(--t-dim);
     font-style: italic;
     margin-top: 1px;
   }
-  .header-divider {
-    width: 1px;
-    height: 60px;
-    background: rgba(255,255,255,0.2);
-    margin: 0 8px;
-  }
-  .second-seal {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: #0d1f12;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border: 2px solid rgba(255,255,255,0.4);
-  }
-  .second-seal img { width: 52px; height: 52px; object-fit: contain; }
-  .header-right {
-    margin-left: auto;
+
+  /* Hotline block */
+  .hdr-right {
+    flex-shrink: 0;
     text-align: right;
+    margin-left: auto;
   }
-  .header-right .emergency-label {
-    font-size: 10px;
-    color: rgba(255,255,255,0.5);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
-  .header-right .hotline {
+  .hdr-right .el  { font-size: 10px; color: var(--t-dim); text-transform: uppercase; letter-spacing: .1em; }
+  .hdr-right .hl  {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--gov-gold);
-    letter-spacing: 0.05em;
+    font-size: clamp(14px, 1.8vw, 20px);
+    font-weight: 700; color: var(--g1); letter-spacing: .04em;
   }
-  .header-right .hotline-sub { font-size: 10px; color: rgba(255,255,255,0.45); }
+  .hdr-right .hls { font-size: 10px; color: var(--t-dim); margin-top: 1px; }
+
+  /* ── MOBILE HEADER stacks ── */
+  @media (max-width: 600px) {
+    .header-inner { flex-wrap: wrap; justify-content: center; gap: 10px; }
+    .seal-wrap { width: 52px; height: 52px; }
+    .seal-wrap .seal-circle { width: 52px; height: 52px; }
+    .seal-wrap .seal-circle.secondary { width: 44px; height: 44px; margin: 4px auto; }
+    .hdr-divider { display: none; }
+    .hdr-title { width: 100%; text-align: center; order: 3; }
+    .hdr-title h1 { white-space: normal; text-align: center; }
+    .hdr-right { width: 100%; text-align: center; order: 4; }
+  }
 
   /* ── NAV ── */
   nav {
-    background: var(--gov-navy-mid);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border-dim);
+    position: sticky; top: 0; z-index: 200;
+    overflow-x: auto; white-space: nowrap;
   }
+  nav::-webkit-scrollbar { height: 2px; }
   .nav-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    gap: 2px;
+    max-width: 1280px; margin: 0 auto; padding: 0 16px;
+    display: flex; align-items: center; gap: 0;
+    min-width: max-content;
   }
   nav a {
-    display: inline-block;
-    padding: 12px 16px;
-    color: rgba(255,255,255,0.75);
-    text-decoration: none;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.04em;
+    display: inline-block; padding: 11px 14px;
+    color: var(--t-muted); text-decoration: none;
+    font-size: 11px; font-weight: 600; letter-spacing: .06em;
     text-transform: uppercase;
-    border-bottom: 3px solid transparent;
-    transition: all 0.15s;
+    border-bottom: 2px solid transparent;
+    transition: color .15s, border-color .15s, background .15s;
   }
   nav a:hover, nav a.active {
-    color: var(--white);
-    border-bottom-color: var(--gov-gold);
-    background: rgba(255,255,255,0.05);
+    color: var(--g1); border-bottom-color: var(--g1);
+    background: rgba(52,208,88,.06);
   }
-  .nav-spacer { flex: 1; }
-  .nav-alert-badge {
-    font-size: 10px;
-    background: var(--gov-red-light);
-    color: white;
-    padding: 3px 8px;
-    border-radius: 2px;
-    letter-spacing: 0.06em;
-    font-weight: 600;
-    animation: pulse-badge 2s infinite;
+  .nav-sp { flex: 1; }
+  .live-pill {
+    font-size: 10px; background: rgba(52,208,88,.12);
+    color: var(--g1); padding: 3px 10px; border-radius: 20px;
+    border: 1px solid var(--border-mid); font-weight: 700;
+    letter-spacing: .08em; animation: blink 2s infinite; flex-shrink: 0;
   }
-  @keyframes pulse-badge { 0%,100% { opacity:1; } 50% { opacity:0.7; } }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.55} }
 
   /* ── ALERT STRIP ── */
   .alert-strip {
-    background: rgba(245,158,11,0.08);
-    border-top: 3px solid rgba(245,158,11,0.5);
-    border-bottom: 1px solid rgba(245,158,11,0.2);
-    padding: 8px 0;
+    background: rgba(251,191,36,.07);
+    border-bottom: 1px solid rgba(251,191,36,.2);
+    padding: 7px 0;
   }
   .alert-strip .inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    max-width: 1280px; margin: 0 auto; padding: 0 20px;
+    display: flex; align-items: flex-start; gap: 10px; flex-wrap: wrap;
   }
-  .alert-strip .label {
-    background: var(--gov-amber-light);
-    color: white;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 2px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    flex-shrink: 0;
+  .al-badge {
+    font-size: 9px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .1em; padding: 2px 8px; border-radius: 2px;
+    background: var(--amber); color: var(--bg1); flex-shrink: 0;
   }
-  .alert-strip .text {
-    font-size: 12px;
-    color: var(--gov-amber);
-    font-weight: 500;
-    letter-spacing: 0.01em;
-  }
+  .al-text { font-size: 12px; color: var(--amber); font-weight: 500; line-height: 1.5; }
 
-  /* ── MAIN LAYOUT ── */
-  main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px;
-  }
+  /* ── MAIN ── */
+  main { max-width: 1280px; margin: 0 auto; padding: 20px 20px; }
 
-  /* ── SECTION HEADERS ── */
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid var(--gov-navy);
+  /* ── SECTION HEADER ── */
+  .shdr {
+    display: flex; align-items: center; gap: 10px;
+    padding-bottom: 10px; margin-bottom: 16px;
+    border-bottom: 1px solid var(--border-dim);
+    position: relative;
   }
-  .section-header .icon-box {
-    width: 32px;
-    height: 32px;
-    background: var(--gov-navy);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 3px;
-    flex-shrink: 0;
+  .shdr::after {
+    content: ''; position: absolute; bottom: -1px; left: 0;
+    width: 48px; height: 1px; background: var(--g1);
   }
-  .section-header .icon-box svg { width: 18px; height: 18px; fill: var(--gov-gold); }
-  .section-header h2 {
+  .shdr-icon {
+    width: 28px; height: 28px; border-radius: 3px;
+    background: rgba(52,208,88,.12);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .shdr-icon svg { width: 15px; height: 15px; stroke: var(--g1); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .shdr h2 {
     font-family: 'Source Serif 4', serif;
-    font-size: 16px;
-    font-weight: 700;
-    color: #4ade80;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    font-size: 13px; font-weight: 700; color: var(--g1);
+    text-transform: uppercase; letter-spacing: .1em;
   }
-  .section-header .section-sub {
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 0.04em;
-  }
-  .section-sub-right {
-    margin-left: auto;
-    font-size: 11px;
-    color: var(--text-muted);
-  }
+  .shdr .ssub { font-size: 10px; color: var(--t-dim); margin-top: 1px; }
+  .shdr .sright { margin-left: auto; font-size: 10px; color: var(--t-dim); white-space: nowrap; }
 
   /* ── STATUS TILES ── */
-  .status-grid {
+  .stat-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 8px;
-    margin-bottom: 28px;
+    gap: 8px; margin-bottom: 24px;
   }
-  @media (max-width: 900px) { .status-grid { grid-template-columns: repeat(3, 1fr); } }
-  .stat-tile {
-    background: #0d1f12;
-    border: 1px solid var(--border);
-    border-top: 4px solid var(--gov-navy);
-    padding: 14px 12px;
-    text-align: center;
-    border-radius: 2px;
+  @media (max-width: 900px) { .stat-grid { grid-template-columns: repeat(3,1fr); } }
+  @media (max-width: 480px) { .stat-grid { grid-template-columns: repeat(2,1fr); } }
+  .stile {
+    background: var(--bg3); border: 1px solid var(--border-dim);
+    border-top: 3px solid var(--border-mid);
+    padding: 14px 10px; text-align: center; border-radius: 3px;
   }
-  .stat-tile.alert-red { border-top-color: var(--gov-red-light); }
-  .stat-tile.alert-amber { border-top-color: var(--gov-amber-light); }
-  .stat-tile.alert-green { border-top-color: var(--gov-green-light); }
-  .stat-tile .stat-label {
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-    font-weight: 600;
-    margin-bottom: 6px;
+  .stile.c-green { border-top-color: var(--g1); }
+  .stile.c-red   { border-top-color: var(--red); }
+  .stile.c-amber { border-top-color: var(--amber); }
+  .stile .sl {
+    font-size: 9px; text-transform: uppercase; letter-spacing: .1em;
+    color: var(--t-muted); font-weight: 700; margin-bottom: 6px;
   }
-  .stat-tile .stat-value {
+  .stile .sv {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--gov-gold);
-    line-height: 1;
-    margin-bottom: 4px;
+    font-size: 28px; font-weight: 700; color: var(--t-primary);
+    line-height: 1; margin-bottom: 3px;
   }
-  .stat-tile.alert-red .stat-value { color: var(--gov-red-light); }
-  .stat-tile .stat-unit { font-size: 10px; color: var(--text-muted); }
+  .stile.c-green .sv { color: var(--g1); }
+  .stile.c-red   .sv { color: var(--red); }
+  .stile .su { font-size: 10px; color: var(--t-muted); }
 
-  /* ── WEATHER + ENV SECTION ── */
+  /* ── ENV GRID ── */
   .env-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 28px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px; margin-bottom: 24px;
   }
-  @media (max-width: 900px) { .env-grid { grid-template-columns: 1fr; } }
-  .env-card {
-    background: #0d1f12;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .env-card-header {
-    background: var(--gov-navy);
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .env-card-header h3 {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--gov-gold);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-  .env-card-header .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--gov-green-light);
-    box-shadow: 0 0 0 3px rgba(22,163,74,0.2);
-  }
-  .env-card-body { padding: 16px 14px; }
+  @media (max-width: 900px) { .env-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .env-grid { grid-template-columns: 1fr; } }
 
-  /* Heat Index Card */
-  .heat-main {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    margin-bottom: 8px;
+  .ecard { background: var(--bg3); border: 1px solid var(--border-dim); border-radius: 3px; overflow: hidden; }
+  .ecard-hdr {
+    background: var(--bg4); border-bottom: 1px solid var(--border-dim);
+    padding: 9px 14px; display: flex; align-items: center; gap: 8px;
   }
-  .heat-val {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 48px;
-    font-weight: 700;
-    line-height: 1;
+  .ecard-hdr h3 { font-size: 11px; font-weight: 700; color: var(--g2); text-transform: uppercase; letter-spacing: .1em; }
+  .live-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--g1); margin-left: auto;
+    box-shadow: 0 0 6px var(--g1); animation: blink 2s infinite;
   }
-  .heat-unit { font-size: 18px; color: var(--text-muted); }
-  .heat-label {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 2px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-  .heat-label.caution { background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
-  .heat-label.danger { background: rgba(239,68,68,0.12); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
-  .heat-label.safe { background: rgba(34,197,94,0.1); color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
-  .heat-label.extreme { background: #7f1d1d; color: white; }
-  .heat-scale {
-    display: flex;
-    height: 8px;
-    border-radius: 2px;
-    overflow: hidden;
-    margin-bottom: 8px;
-  }
-  .heat-scale span { flex: 1; }
-  .heat-scale .s1 { background: #4ade80; }
-  .heat-scale .s2 { background: #facc15; }
-  .heat-scale .s3 { background: #fb923c; }
-  .heat-scale .s4 { background: #ef4444; }
-  .heat-scale .s5 { background: #7f1d1d; }
-  .heat-scale-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 9px;
-    color: var(--text-muted);
-    letter-spacing: 0.04em;
-  }
-  .heat-meta {
-    margin-top: 12px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-  .heat-meta-item { font-size: 11px; color: var(--text-muted); }
-  .heat-meta-item strong { display: block; color: var(--text); font-size: 13px; }
+  .ecard-body { padding: 16px 14px; }
 
-  /* AQI Card */
-  .aqi-main { text-align: center; padding: 8px 0; }
-  .aqi-ring-wrap { position: relative; display: inline-block; margin-bottom: 8px; }
-  .aqi-ring-wrap svg { display: block; }
-  .aqi-center {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
+  /* HEAT INDEX */
+  .hi-top { display: flex; align-items: baseline; gap: 5px; margin-bottom: 4px; }
+  .hi-val { font-family: 'IBM Plex Mono', monospace; font-size: 52px; font-weight: 700; color: var(--t-primary); line-height: 1; }
+  .hi-unit { font-size: 20px; color: var(--t-muted); }
+  .hi-feels { font-size: 12px; color: var(--t-muted); margin-bottom: 10px; }
+  .hi-pill {
+    display: inline-block; padding: 3px 10px; border-radius: 2px;
+    font-size: 11px; font-weight: 700; letter-spacing: .08em;
+    text-transform: uppercase; margin-bottom: 12px;
   }
-  .aqi-num {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 30px;
-    font-weight: 700;
-    color: var(--gov-gold);
-    line-height: 1;
+  .pill-safe    { background: rgba(52,208,88,.15);  color: var(--g2); border: 1px solid rgba(52,208,88,.35); }
+  .pill-caution { background: rgba(251,191,36,.15); color: var(--amber); border: 1px solid rgba(251,191,36,.4); }
+  .pill-danger  { background: rgba(248,113,113,.15);color: var(--red); border: 1px solid rgba(248,113,113,.4); }
+  .pill-extreme { background: #2a0808; color: #fca5a5; border: 1px solid rgba(248,113,113,.5); }
+  .hi-scale { display: flex; height: 6px; border-radius: 2px; overflow: hidden; margin-bottom: 6px; }
+  .hi-scale span { flex: 1; }
+  .hs1{background:#34d058}.hs2{background:#fbbf24}.hs3{background:#fb923c}.hs4{background:#ef4444}.hs5{background:#7f1d1d}
+  .hi-scale-lbl { display: flex; justify-content: space-between; font-size: 9px; color: var(--t-muted); margin-bottom: 14px; }
+  .hi-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .hm-item .hm-lbl { font-size: 10px; color: var(--t-muted); text-transform: uppercase; letter-spacing: .06em; }
+  .hm-item .hm-val { font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; color: var(--g3); }
+  .hi-warn {
+    margin-top: 12px; padding: 8px 10px;
+    background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.25);
+    border-radius: 2px; font-size: 12px; color: var(--amber); line-height: 1.5;
   }
-  .aqi-label-small { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
-  .aqi-status {
-    display: inline-block;
-    padding: 4px 14px;
-    border-radius: 2px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-  .aqi-status.moderate { background: rgba(245,158,11,0.1); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
-  .aqi-status.good { background: rgba(34,197,94,0.1); color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
-  .aqi-pollutants {
-    margin-top: 12px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    text-align: left;
-  }
-  .aqi-poll-item { font-size: 11px; }
-  .aqi-poll-item .name { color: var(--text-muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em; }
-  .aqi-poll-item .value { font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: var(--text); }
-  .aqi-bar { height: 4px; background: var(--gov-gray-200); border-radius: 2px; margin-top: 3px; }
-  .aqi-bar-fill { height: 100%; border-radius: 2px; }
 
-  /* Weather overview */
-  .weather-conditions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 12px;
+  /* AQI */
+  .aqi-wrap { display: flex; flex-direction: column; align-items: center; padding: 4px 0 8px; }
+  .aqi-gauge { position: relative; width: 120px; height: 120px; margin-bottom: 6px; }
+  .aqi-gauge svg { display: block; }
+  .aqi-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); text-align: center; }
+  .aqi-num { font-family: 'IBM Plex Mono', monospace; font-size: 30px; font-weight: 700; color: var(--g1); line-height: 1; }
+  .aqi-sub { font-size: 9px; color: var(--t-muted); text-transform: uppercase; letter-spacing: .06em; }
+  .aqi-pill {
+    display: inline-block; padding: 3px 12px; border-radius: 2px;
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .08em; margin-bottom: 12px;
   }
-  .wc-item { font-size: 12px; }
-  .wc-item .wc-label { color: var(--text-muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
-  .wc-item .wc-val { font-weight: 600; color: var(--text); font-size: 15px; }
-  .wc-item .wc-sub { font-size: 10px; color: var(--text-muted); }
-  .pagasa-alerts {
-    margin-top: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .pagasa-alert {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 10px;
-    background: rgba(34,197,94,0.06);
-    border-radius: 2px;
-    border-left: 3px solid var(--border);
-    font-size: 11px;
-  }
-  .pagasa-alert.green { border-left-color: var(--gov-green-light); }
-  .pagasa-alert.yellow { border-left-color: var(--gov-amber-light); background: rgba(245,158,11,0.07); }
-  .pagasa-alert.red { border-left-color: var(--gov-red-light); background: rgba(239,68,68,0.07); }
-  .pagasa-alert .pa-type { font-weight: 600; color: var(--text); }
-  .pagasa-alert .pa-status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
-  .pagasa-alert.green .pa-status { color: var(--gov-green-light); }
-  .pagasa-alert.yellow .pa-status { color: var(--gov-amber-light); }
-  .pagasa-alert.red .pa-status { color: var(--gov-red-light); }
+  .aqi-good     { background: rgba(52,208,88,.12);  color: var(--g2); border: 1px solid rgba(52,208,88,.3); }
+  .aqi-moderate { background: rgba(251,191,36,.1);  color: var(--amber); border: 1px solid rgba(251,191,36,.3); }
+  .aqi-usg      { background: rgba(251,146,60,.12); color: #fb923c; border: 1px solid rgba(251,146,60,.3); }
+  .poll-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; width: 100%; }
+  .poll-item .pn { font-size: 9px; color: var(--t-muted); text-transform: uppercase; letter-spacing: .06em; }
+  .poll-item .pv { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; color: var(--g3); }
+  .pbar { height: 3px; background: var(--bg4); border-radius: 2px; margin-top: 3px; }
+  .pbar-fill { height: 100%; border-radius: 2px; }
+  .aqi-src { font-size: 9px; color: var(--t-dim); text-align: right; margin-top: 10px; }
 
-  /* ── WINDY MAP ── */
-  .map-row {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 16px;
-    margin-bottom: 28px;
+  /* PAGASA PANEL */
+  .wc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .wc-item .wcl { font-size: 9px; color: var(--t-muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 2px; }
+  .wc-item .wcv { font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 600; color: var(--t-primary); }
+  .wc-item .wcs { font-size: 10px; color: var(--t-muted); }
+  .pag-list { display: flex; flex-direction: column; gap: 5px; }
+  .pag-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 7px 10px; border-radius: 2px;
+    background: var(--bg4); border: 1px solid var(--border-dim);
+    border-left: 3px solid var(--border-dim); font-size: 12px;
   }
+  .pag-row.pg { border-left-color: var(--g1); }
+  .pag-row.pa { border-left-color: var(--amber); background: rgba(251,191,36,.06); }
+  .pag-row.pr { border-left-color: var(--red);   background: rgba(248,113,113,.06); }
+  .pag-row .prt { font-weight: 600; color: var(--t-body); }
+  .pag-row .prs { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; }
+  .pag-row.pg .prs { color: var(--g1); }
+  .pag-row.pa .prs { color: var(--amber); }
+  .pag-row.pr .prs { color: var(--red); }
+
+  /* ── MAP ROW ── */
+  .map-row { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; margin-bottom: 24px; }
   @media (max-width: 900px) { .map-row { grid-template-columns: 1fr; } }
-  .map-card {
-    background: #0d1f12;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    overflow: hidden;
+  .mcard { background: var(--bg3); border: 1px solid var(--border-dim); border-radius: 3px; overflow: hidden; }
+  .mhdr {
+    background: var(--bg4); border-bottom: 1px solid var(--border-dim);
+    padding: 9px 14px; display: flex; align-items: center; gap: 8px;
   }
-  .map-card-header {
-    background: var(--gov-navy);
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  .mhdr h3 { font-size: 11px; font-weight: 700; color: var(--g2); text-transform: uppercase; letter-spacing: .1em; }
+  .mtabs { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; }
+  .mtab {
+    font-size: 9px; padding: 3px 8px; border-radius: 2px; cursor: pointer;
+    color: var(--t-muted); border: 1px solid var(--border-dim);
+    background: transparent; font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600; letter-spacing: .05em; text-transform: uppercase; transition: all .15s;
   }
-  .map-card-header h3 { font-size: 11px; font-weight: 700; color: var(--gov-gold); text-transform: uppercase; letter-spacing: 0.08em; }
-  .map-tabs { display: flex; gap: 4px; margin-left: auto; }
-  .map-tab {
-    font-size: 10px;
-    padding: 3px 8px;
-    border-radius: 2px;
-    cursor: pointer;
-    color: rgba(255,255,255,0.6);
-    border: 1px solid rgba(255,255,255,0.15);
-    background: transparent;
-    font-family: 'IBM Plex Sans', sans-serif;
-  }
-  .map-tab.active { background: var(--gov-gold); color: var(--gov-gold); font-weight: 600; border-color: var(--gov-gold); }
-  .map-frame { display: block; width: 100%; height: 340px; border: none; }
-  .map-panel { padding: 14px; }
+  .mtab.active, .mtab:hover { background: var(--g1); color: var(--bg1); border-color: var(--g1); }
+  .mframe { display: block; width: 100%; height: 320px; border: none; }
+  .mpanel { padding: 14px; }
+  .mstat-row { display: flex; gap: 0; border-top: 1px solid var(--border-dim); margin-top: 14px; }
+  .mstat { flex: 1; text-align: center; padding: 10px 4px; }
+  .mstat + .mstat { border-left: 1px solid var(--border-dim); }
+  .mstat .mv { font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 700; color: var(--g1); }
+  .mstat .ml { font-size: 9px; color: var(--t-muted); text-transform: uppercase; letter-spacing: .08em; margin-top: 2px; }
 
   /* ── ADVISORIES ── */
-  .advisories-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-    margin-bottom: 28px;
+  .adv-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
+  @media (max-width: 900px) { .adv-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .adv-grid { grid-template-columns: 1fr; } }
+  .adv-card { background: var(--bg3); border: 1px solid var(--border-dim); border-radius: 3px; overflow: hidden; }
+  .adv-img { width: 100%; height: 130px; object-fit: cover; display: block; filter: brightness(.7) saturate(.8); }
+  .adv-body { padding: 12px 13px; }
+  .adv-tag {
+    display: inline-block; font-size: 8px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .1em; padding: 2px 6px; border-radius: 2px;
+    background: rgba(52,208,88,.12); color: var(--g2); margin-bottom: 5px;
   }
-  @media (max-width: 900px) { .advisories-grid { grid-template-columns: 1fr; } }
-  .advisory-card {
-    background: #0d1f12;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .advisory-img { width: 100%; height: 140px; object-fit: cover; display: block; }
-  .advisory-body { padding: 12px 14px; }
-  .advisory-tag {
-    display: inline-block;
-    font-size: 9px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 2px 6px;
-    border-radius: 2px;
-    background: var(--gov-navy);
-    color: var(--gov-gold);
-    margin-bottom: 6px;
-  }
-  .advisory-body h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; color: #86efac; }
-  .advisory-body p { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+  .adv-body h4 { font-size: 13px; font-weight: 600; color: var(--t-primary); margin-bottom: 5px; }
+  .adv-body p  { font-size: 12px; color: var(--t-body); line-height: 1.6; }
 
-  /* ── ANNOUNCEMENTS + HOTLINES ── */
-  .info-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 28px;
-  }
+  /* ── INFO ROW ── */
+  .info-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
   @media (max-width: 700px) { .info-row { grid-template-columns: 1fr; } }
-  .info-card {
-    background: #0d1f12;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    overflow: hidden;
+  .icard { background: var(--bg3); border: 1px solid var(--border-dim); border-radius: 3px; overflow: hidden; }
+  .icard-hdr {
+    background: var(--bg4); border-bottom: 1px solid var(--border-dim); padding: 9px 14px;
   }
-  .info-card-header {
-    background: var(--gov-navy);
-    padding: 10px 14px;
-  }
-  .info-card-header h3 { font-size: 11px; font-weight: 700; color: var(--gov-gold); text-transform: uppercase; letter-spacing: 0.08em; }
-  .info-card-body { padding: 0; }
+  .icard-hdr h3 { font-size: 11px; font-weight: 700; color: var(--g2); text-transform: uppercase; letter-spacing: .1em; }
 
-  .announce-item {
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--gov-gray-200);
-    display: flex;
-    gap: 10px;
+  /* Announcements */
+  .ann-item { padding: 11px 14px; border-bottom: 1px solid var(--border-dim); display: flex; gap: 10px; }
+  .ann-item:last-child { border-bottom: none; }
+  .ann-date { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--t-muted); flex-shrink: 0; width: 60px; padding-top: 2px; }
+  .ann-h5 { font-size: 13px; font-weight: 600; color: var(--t-primary); margin-bottom: 2px; }
+  .ann-p  { font-size: 12px; color: var(--t-body); }
+  .atag {
+    display: inline-block; font-size: 8px; padding: 1px 6px; border-radius: 2px;
+    font-weight: 700; letter-spacing: .07em; margin-bottom: 3px;
   }
-  .announce-item:last-child { border-bottom: none; }
-  .announce-date {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: var(--text-muted);
-    flex-shrink: 0;
-    width: 70px;
-    padding-top: 1px;
-  }
-  .announce-content h5 { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
-  .announce-content p { font-size: 11px; color: var(--text-muted); }
-  .announce-tag {
-    display: inline-block;
-    font-size: 9px;
-    padding: 1px 5px;
-    border-radius: 2px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    margin-bottom: 2px;
-  }
-  .tag-news { background: rgba(34,197,94,0.12); color: #16a34a; }
-  .tag-sched { background: rgba(74,222,128,0.1); color: #15803d; }
-  .tag-advisory { background: rgba(245,158,11,0.12); color: #fcd34d; }
+  .t-news  { background: rgba(52,208,88,.12);  color: var(--g2); }
+  .t-sched { background: rgba(103,232,249,.1); color: var(--sky); }
+  .t-adv   { background: rgba(251,191,36,.12); color: var(--amber); }
 
   /* Hotlines */
-  .hotline-grid {
-    padding: 12px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
+  .hl-grid { padding: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .hl-item {
+    display: flex; align-items: center; gap: 9px;
+    padding: 9px 10px; background: var(--bg4); border: 1px solid var(--border-dim);
+    border-radius: 3px; text-decoration: none; transition: border-color .15s;
   }
-  .hotline-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 10px;
-    background: rgba(34,197,94,0.06);
-    border-radius: 2px;
-    text-decoration: none;
-    border: 1px solid var(--border);
-    transition: background 0.15s;
+  .hl-item:hover { border-color: var(--g1); }
+  .hl-ico {
+    width: 32px; height: 32px; border-radius: 3px;
+    background: rgba(52,208,88,.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
   }
-  .hotline-item:hover { background: #e8f0fe; }
-  .hotline-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 2px;
-    background: var(--gov-navy);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    font-size: 14px;
+  .hl-org { font-size: 9px; font-weight: 700; color: var(--g3); text-transform: uppercase; letter-spacing: .05em; }
+  .hl-num { font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 700; color: var(--g1); }
+  .hl-warn {
+    padding: 8px 12px; background: rgba(248,113,113,.07);
+    border-top: 1px solid rgba(248,113,113,.18);
+    font-size: 11px; color: var(--red);
   }
-  .hotline-text .org { font-size: 10px; font-weight: 700; color: var(--gov-gold-light); text-transform: uppercase; letter-spacing: 0.04em; }
-  .hotline-text .num { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; color: #4ade80; }
 
   /* ── INCIDENTS TABLE ── */
-  .table-card {
-    background: #0d1f12;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-    margin-bottom: 28px;
+  .tcard { background: var(--bg3); border: 1px solid var(--border-dim); border-radius: 3px; overflow: hidden; margin-bottom: 24px; }
+  .thdr {
+    background: var(--bg4); border-bottom: 1px solid var(--border-dim);
+    padding: 9px 16px; display: flex; align-items: center; justify-content: space-between;
   }
-  .table-card-header {
-    background: var(--gov-navy);
-    padding: 10px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .table-card-header h3 { font-size: 11px; font-weight: 700; color: var(--gov-gold); text-transform: uppercase; letter-spacing: 0.08em; }
-  .table-card-header .timestamp { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.45); }
+  .thdr h3 { font-size: 11px; font-weight: 700; color: var(--g2); text-transform: uppercase; letter-spacing: .1em; }
+  .thdr .ts { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--t-dim); }
   table { width: 100%; border-collapse: collapse; }
   thead th {
-    background: rgba(34,197,94,0.06);
-    padding: 8px 12px;
-    text-align: left;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-muted);
-    border-bottom: 1px solid var(--border);
+    background: var(--bg4); padding: 8px 12px; text-align: left;
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
+    color: var(--t-muted); border-bottom: 1px solid var(--border-dim);
+    white-space: nowrap;
   }
   tbody td {
-    padding: 10px 12px;
-    font-size: 12px;
-    border-bottom: 1px solid var(--gov-gray-200);
-    color: var(--text);
+    padding: 11px 12px; font-size: 13px;
+    border-bottom: 1px solid var(--border-dim); color: var(--t-body);
   }
   tbody tr:last-child td { border-bottom: none; }
-  tbody tr:hover td { background: rgba(34,197,94,0.06); }
-  .status-badge {
-    display: inline-block;
-    font-size: 9px;
-    font-weight: 700;
-    padding: 2px 7px;
-    border-radius: 2px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+  tbody tr:hover td { background: rgba(52,208,88,.04); }
+  .sbadge {
+    display: inline-block; font-size: 9px; font-weight: 700;
+    padding: 2px 7px; border-radius: 2px; text-transform: uppercase; letter-spacing: .06em;
   }
-  .badge-active { background: rgba(245,158,11,0.12); color: #fcd34d; }
-  .badge-resolved { background: rgba(34,197,94,0.1); color: #4ade80; }
-  .badge-standby { background: rgba(34,197,94,0.12); color: #16a34a; }
+  .sb-active   { background: rgba(251,191,36,.15); color: var(--amber); }
+  .sb-resolved { background: rgba(52,208,88,.12);  color: var(--g2); }
+  .sb-standby  { background: rgba(103,232,249,.1); color: var(--sky); }
+
+  /* ── FIRST AID ── */
+  .fa-card { background: var(--bg3); border: 1px solid var(--border-dim); border-radius: 3px; overflow: hidden; margin-bottom: 24px; }
+  .fa-hdr {
+    background: rgba(220,38,38,.15); border-bottom: 1px solid rgba(248,113,113,.2);
+    padding: 9px 14px; display: flex; align-items: center; gap: 8px;
+  }
+  .fa-hdr h3 { font-size: 11px; font-weight: 700; color: #fca5a5; text-transform: uppercase; letter-spacing: .1em; }
+  .fa-hdr .fa-badge {
+    font-size: 8px; background: rgba(248,113,113,.15); color: #fca5a5;
+    border: 1px solid rgba(248,113,113,.3); padding: 1px 6px; border-radius: 2px; font-weight: 700;
+  }
+  .fa-grid { padding: 10px; display: grid; grid-template-columns: repeat(6,1fr); gap: 5px; }
+  @media (max-width: 700px) { .fa-grid { grid-template-columns: repeat(3,1fr); } }
+  @media (max-width: 380px) { .fa-grid { grid-template-columns: repeat(2,1fr); } }
+  .fa-btn {
+    padding: 8px 4px; border: 1px solid var(--border-dim); border-radius: 3px;
+    background: var(--bg4); text-align: center; cursor: pointer;
+    font-family: 'IBM Plex Sans', sans-serif; font-size: 10px; font-weight: 600;
+    color: var(--g3); text-transform: uppercase; letter-spacing: .04em;
+    transition: all .15s;
+  }
+  .fa-btn:hover, .fa-btn.sel {
+    background: rgba(52,208,88,.1); border-color: var(--g1); color: var(--g2);
+  }
+  .fa-emoji { display: block; font-size: 16px; margin-bottom: 3px; }
+  .fa-out {
+    display: none; padding: 14px;
+    background: var(--bg4); border-top: 1px solid var(--border-dim);
+    font-size: 13px; color: var(--t-body); line-height: 1.75;
+  }
 
   /* ── MISSION/VISION ── */
-  .mvv-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 28px;
-  }
-  @media (max-width: 700px) { .mvv-grid { grid-template-columns: 1fr; } }
-  .mvv-card {
-    background: #0d1f12;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 20px 18px;
-  }
-  .mvv-card .mvv-icon {
-    font-size: 28px;
-    margin-bottom: 8px;
-  }
+  .mvv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  @media (max-width: 600px) { .mvv-grid { grid-template-columns: 1fr; } }
+  .mvv-card { background: var(--bg3); border: 1px solid var(--border-dim); border-radius: 3px; padding: 18px 16px; }
+  .mvv-card .micon { font-size: 24px; margin-bottom: 8px; }
   .mvv-card h4 {
     font-family: 'Source Serif 4', serif;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--gov-gold);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 10px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--gov-gold);
+    font-size: 13px; font-weight: 700; color: var(--g1);
+    text-transform: uppercase; letter-spacing: .1em;
+    padding-bottom: 8px; margin-bottom: 10px;
+    border-bottom: 1px solid var(--border-dim);
   }
-  .mvv-card p { font-size: 12px; color: var(--text-muted); line-height: 1.7; }
+  .mvv-card p { font-size: 13px; color: var(--t-body); line-height: 1.75; }
 
-  /* ── PARTNER AGENCIES ── */
-  .partners-bar {
-    background: #0d1f12;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 14px 18px;
-    margin-bottom: 28px;
+  /* ── PARTNERS ── */
+  .partners {
+    background: var(--bg3); border: 1px solid var(--border-dim);
+    border-radius: 3px; padding: 14px 16px; margin-bottom: 24px;
   }
-  .partners-label {
-    font-size: 9px;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--text-muted);
-    font-weight: 700;
-    margin-bottom: 12px;
-  }
-  .partners-logos {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-  .partner-logo {
-    width: 52px;
-    height: 52px;
-    object-fit: contain;
-    filter: grayscale(30%);
-    opacity: 0.85;
-    transition: opacity 0.15s;
-  }
-  .partner-logo:hover { opacity: 1; filter: grayscale(0%); }
+  .partners-lbl { font-size: 9px; text-transform: uppercase; letter-spacing: .12em; color: var(--t-muted); font-weight: 700; margin-bottom: 10px; }
+  .partners-logos { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .plogo { width: 48px; height: 48px; object-fit: contain; opacity: .6; filter: grayscale(20%); transition: opacity .15s; }
+  .plogo:hover { opacity: 1; filter: grayscale(0%); }
 
   /* ── FOOTER ── */
   footer {
-    background: var(--gov-navy);
-    color: rgba(255,255,255,0.55);
-    border-top: 3px solid var(--gov-gold);
-    padding: 24px 0 16px;
-    font-size: 11px;
+    background: var(--bg2); border-top: 1px solid var(--border-dim);
+    padding: 22px 0 14px; font-size: 12px; color: var(--t-muted);
   }
-  .footer-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-  .footer-top {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 24px;
-    margin-bottom: 16px;
-  }
-  .footer-col h5 {
-    font-size: 10px;
-    font-weight: 700;
-    color: var(--gov-gold);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 8px;
-  }
-  .footer-col p { line-height: 1.7; }
-  .footer-col a { color: rgba(255,255,255,0.55); text-decoration: none; display: block; margin-bottom: 4px; }
-  .footer-col a:hover { color: var(--gov-gold); }
-  .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 12px 0; }
-  .footer-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .footer-bottom .gov-notice { font-size: 10px; color: rgba(255,255,255,0.35); }
+  .fi { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+  .ftop { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 22px; margin-bottom: 14px; }
+  @media (max-width: 700px) { .ftop { grid-template-columns: 1fr; } }
+  .fcol h5 { font-size: 10px; font-weight: 700; color: var(--g2); text-transform: uppercase; letter-spacing: .12em; margin-bottom: 7px; }
+  .fcol p { line-height: 1.75; color: var(--t-muted); }
+  .fcol a { color: var(--t-muted); text-decoration: none; display: block; margin-bottom: 3px; }
+  .fcol a:hover { color: var(--g1); }
+  .fdivider { border: none; border-top: 1px solid var(--border-dim); margin: 10px 0; }
+  .fbot { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 11px; }
+  .fbot .fn { color: var(--t-dim); }
 
-  /* ── SECTION spacing ── */
-  .section { margin-bottom: 32px; }
-
-  /* First aid mini panel */
-  .first-aid-panel {
-    background: #0d1f12;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-    margin-bottom: 28px;
-  }
-  .fa-header {
-    background: var(--gov-red);
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .fa-header h3 { font-size: 11px; font-weight: 700; color: white; text-transform: uppercase; letter-spacing: 0.08em; }
-  .fa-header .fa-badge { font-size: 9px; background: rgba(239,68,68,0.15); color: #fca5a5; padding: 1px 6px; border-radius: 2px; font-weight: 700; }
-  .fa-grid {
-    padding: 12px;
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 6px;
-  }
-  @media (max-width: 700px) { .fa-grid { grid-template-columns: repeat(3, 1fr); } }
-  .fa-btn {
-    padding: 8px 6px;
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    background: rgba(34,197,94,0.06);
-    text-align: center;
-    cursor: pointer;
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--gov-gold);
-    transition: background 0.15s;
-  }
-  .fa-btn:hover { background: rgba(34,197,94,0.08); border-color: #22c55e; }
-  .fa-emoji { display: block; font-size: 18px; margin-bottom: 2px; }
+  /* ── TABLE OVERFLOW ON MOBILE ── */
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 </style>
 </head>
 <body>
 
 <!-- TOP BANNER -->
-<div class="top-banner">
+<div class="top-strip">
   <div class="inner">
-    <span>Republic of the Philippines — Province of Cavite — Municipality of Rosario</span>
+    <span class="rep">Republic of the Philippines — Province of Cavite — Municipality of Rosario</span>
     <span class="clock" id="clock">—</span>
   </div>
 </div>
@@ -845,31 +594,43 @@
 <!-- HEADER -->
 <header>
   <div class="header-inner">
-    <div class="logo-block">
-      <div class="logo-seal">
-        <img src="https://briones777.github.io/MDRRMO/images/MunicipalityRosario-logo.png" alt="Rosario Cavite Seal" onerror="this.style.display='none'" />
-      </div>
-      <div class="logo-text">
-        <h1>MDRRMO — Rosario, Cavite</h1>
-        <div class="subtitle">Municipal Disaster Risk Reduction and Management Office</div>
-        <div class="tagline">Bayang Tahimik, Masaya, at Maunlad</div>
-      </div>
-      <div class="header-divider"></div>
-      <div class="second-seal">
-        <img src="https://briones777.github.io/MDRRMO/images/mdr.PNG" alt="MDRRMO Seal" onerror="this.style.display='none'" />
+    <!-- Primary seal: Rosario, Cavite -->
+    <div class="seal-wrap">
+      <div class="seal-circle">
+        <img src="https://briones777.github.io/MDRRMO/images/MunicipalityRosario-logo.png"
+             alt="Seal of Rosario, Cavite" onerror="this.style.display='none'"/>
       </div>
     </div>
-    <div class="header-right">
-      <div class="emergency-label">24/7 Emergency Hotline</div>
-      <div class="hotline">0912-345-6789</div>
-      <div class="hotline-sub">National Emergency · 911</div>
+
+    <div class="hdr-divider"></div>
+
+    <!-- Title -->
+    <div class="hdr-title">
+      <h1>MDRRMO — Rosario, Cavite</h1>
+      <div class="sub">Municipal Disaster Risk Reduction &amp; Management Office</div>
+      <div class="tag">Bayang Tahimik, Masaya, at Maunlad</div>
+    </div>
+
+    <!-- Secondary seal: MDRRMO -->
+    <div class="seal-wrap">
+      <div class="seal-circle secondary">
+        <img src="https://briones777.github.io/MDRRMO/images/mdr.PNG"
+             alt="MDRRMO Seal" onerror="this.style.display='none'"/>
+      </div>
+    </div>
+
+    <!-- Hotline -->
+    <div class="hdr-right">
+      <div class="el">24/7 Emergency Hotline</div>
+      <div class="hl">0912-345-6789</div>
+      <div class="hls">National Emergency · 911</div>
     </div>
   </div>
 </header>
 
 <!-- NAV -->
 <nav>
-  <div class="nav-inner">
+  <div class="nav-inner nav-i">
     <a href="#" class="active">Dashboard</a>
     <a href="#weather">Weather</a>
     <a href="#advisories">Advisories</a>
@@ -877,16 +638,16 @@
     <a href="#announcements">Announcements</a>
     <a href="#hotlines">Hotlines</a>
     <a href="https://briones777.github.io/MDRRMO/gallery.html">Gallery</a>
-    <div class="nav-spacer"></div>
-    <span class="nav-alert-badge">● LIVE</span>
+    <div class="nav-sp"></div>
+    <span class="live-pill">● LIVE</span>
   </div>
 </nav>
 
 <!-- ALERT STRIP -->
 <div class="alert-strip">
   <div class="inner">
-    <span class="label">Advisory</span>
-    <span class="text">PAGASA: Heat index may reach 40°C this afternoon in low-lying areas of Cavite. Limit outdoor activities between 10:00 AM – 4:00 PM.</span>
+    <span class="al-badge">Advisory</span>
+    <span class="al-text">PAGASA: Heat index may reach 40°C this afternoon in low-lying areas of Cavite. Limit outdoor activities between 10:00 AM – 4:00 PM.</span>
   </div>
 </div>
 
@@ -894,62 +655,62 @@
 
   <!-- STATUS TILES -->
   <div class="section">
-    <div class="status-grid">
-      <div class="stat-tile">
-        <div class="stat-label">Present Evacuees</div>
-        <div class="stat-value">45</div>
-        <div class="stat-unit">persons</div>
+    <div class="stat-grid">
+      <div class="stile">
+        <div class="sl">Present Evacuees</div>
+        <div class="sv">45</div>
+        <div class="su">persons</div>
       </div>
-      <div class="stat-tile alert-green">
-        <div class="stat-label">Active Responders</div>
-        <div class="stat-value" style="color:var(--gov-green-light)">12</div>
-        <div class="stat-unit">on duty</div>
+      <div class="stile c-green">
+        <div class="sl">Active Responders</div>
+        <div class="sv" style="color:var(--gov-green-light)">12</div>
+        <div class="su">on duty</div>
       </div>
-      <div class="stat-tile">
-        <div class="stat-label">Reported Fatalities</div>
-        <div class="stat-value">0</div>
-        <div class="stat-unit">this period</div>
+      <div class="stile">
+        <div class="sl">Reported Fatalities</div>
+        <div class="sv">0</div>
+        <div class="su">this period</div>
       </div>
-      <div class="stat-tile">
-        <div class="stat-label">Reported Injuries</div>
-        <div class="stat-value">0</div>
-        <div class="stat-unit">this period</div>
+      <div class="stile">
+        <div class="sl">Reported Injuries</div>
+        <div class="sv">0</div>
+        <div class="su">this period</div>
       </div>
-      <div class="stat-tile">
-        <div class="stat-label">Fire Casualties</div>
-        <div class="stat-value">0</div>
-        <div class="stat-unit">this period</div>
+      <div class="stile">
+        <div class="sl">Fire Casualties</div>
+        <div class="sv">0</div>
+        <div class="su">this period</div>
       </div>
-      <div class="stat-tile alert-green">
-        <div class="stat-label">Avg. Response Time</div>
-        <div class="stat-value" style="color:var(--gov-green-light);font-size:22px">5 min</div>
-        <div class="stat-unit">last 30 days</div>
+      <div class="stile c-green">
+        <div class="sl">Avg. Response Time</div>
+        <div class="sv" style="color:var(--gov-green-light);font-size:22px">5 min</div>
+        <div class="su">last 30 days</div>
       </div>
     </div>
   </div>
 
   <!-- ENVIRONMENTAL MONITORING -->
   <div class="section" id="weather">
-    <div class="section-header">
-      <div class="icon-box">
+    <div class="shdr">
+      <div class="shdr-icon">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9z"/><path d="M3 14h18M7 19h10"/></svg>
       </div>
       <div>
         <h2>Environmental Monitoring</h2>
-        <div class="section-sub">Real-time conditions · Rosario, Cavite</div>
+        <div class="ssub">Real-time conditions · Rosario, Cavite</div>
       </div>
-      <div class="section-sub-right" id="env-updated">Updated —</div>
+      <div class="sright" id="env-updated">Updated —</div>
     </div>
 
     <div class="env-grid">
 
       <!-- HEAT INDEX -->
-      <div class="env-card">
-        <div class="env-card-header">
+      <div class="ecard">
+        <div class="ecard-hdr">
           <div class="dot"></div>
           <h3>Heat Index Monitor</h3>
         </div>
-        <div class="env-card-body">
+        <div class="ecard-body">
           <div class="heat-main">
             <span class="heat-val" id="heat-val">38</span>
             <span class="heat-unit">°C</span>
@@ -988,12 +749,12 @@
       </div>
 
       <!-- AIR QUALITY -->
-      <div class="env-card">
-        <div class="env-card-header">
+      <div class="ecard">
+        <div class="ecard-hdr">
           <div class="dot"></div>
           <h3>Air Quality Index (AQI)</h3>
         </div>
-        <div class="env-card-body">
+        <div class="ecard-body">
           <div class="aqi-main">
             <div class="aqi-ring-wrap">
               <svg width="110" height="110" viewBox="0 0 110 110">
@@ -1049,12 +810,12 @@
       </div>
 
       <!-- PAGASA ALERTS -->
-      <div class="env-card">
-        <div class="env-card-header">
+      <div class="ecard">
+        <div class="ecard-hdr">
           <div class="dot"></div>
           <h3>PAGASA Alert System</h3>
         </div>
-        <div class="env-card-body">
+        <div class="ecard-body">
           <div class="weather-conditions">
             <div class="wc-item">
               <div class="wc-label">Rainfall</div>
@@ -1110,25 +871,25 @@
   </div>
 
   <!-- WEATHER MAP ROW -->
-  <div class="map-row">
-    <div class="map-card">
-      <div class="map-card-header">
+  <div class="map-row mrow">
+    <div class="mcard">
+      <div class="mhdr">
         <h3>Live Weather Map — Windy</h3>
-        <div class="map-tabs">
-          <button class="map-tab active">Rain</button>
-          <button class="map-tab">Wind</button>
-          <button class="map-tab">Satellite</button>
+        <div class="mtabs">
+          <button class="mtab active">Rain</button>
+          <button class="mtab">Wind</button>
+          <button class="mtab">Satellite</button>
         </div>
       </div>
-      <iframe class="map-frame"
+      <iframe class="mframe"
         src="https://embed.windy.com/embed2.html?lat=14.350&lon=120.388&zoom=6&overlay=rain"
         title="Windy Weather Map" allowfullscreen></iframe>
     </div>
-    <div class="map-card">
-      <div class="map-card-header">
+    <div class="mcard">
+      <div class="mhdr">
         <h3>About MDRRMO</h3>
       </div>
-      <div class="map-panel">
+      <div class="mpanel">
         <img src="https://briones777.github.io/MDRRMO/images/mdr-bldg.jpg" alt="MDRRMO Building" style="width:100%;height:160px;object-fit:cover;border-radius:2px;margin-bottom:12px;" onerror="this.style.display='none'" />
         <p style="font-size:12px;color:var(--text-muted);line-height:1.7;margin-bottom:10px;">
           The MDRRMO ensures disaster preparedness, response, and recovery operations across the municipality. It protects lives through coordinated emergency systems and community resilience programs.
@@ -1156,33 +917,33 @@
 
   <!-- ADVISORIES -->
   <div class="section" id="advisories">
-    <div class="section-header">
-      <div class="icon-box">
+    <div class="shdr">
+      <div class="shdr-icon">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 22h20L12 2zM12 16v-4M12 10h.01"/></svg>
       </div>
       <h2>Public Advisories &amp; Bulletins</h2>
     </div>
-    <div class="advisories-grid">
-      <div class="advisory-card">
-        <img src="https://briones777.github.io/MDRRMO/gallery/el-ninoadvisory.jpg" class="advisory-img" alt="El Niño Advisory" onerror="this.src='https://placehold.co/400x140/0a2342/c8a84b?text=El+Niño+Advisory'" />
-        <div class="advisory-body">
-          <span class="advisory-tag">PAGASA Advisory</span>
+    <div class="adv-grid">
+      <div class="adv-card">
+        <img src="https://briones777.github.io/MDRRMO/gallery/el-ninoadvisory.jpg" class="adv-img" alt="El Niño Advisory" onerror="this.src='https://placehold.co/400x140/0a2342/c8a84b?text=El+Niño+Advisory'" />
+        <div class="adv-body">
+          <span class="adv-tag">PAGASA Advisory</span>
           <h4>El Niño Safety Advisory</h4>
           <p>ENSO-neutral conditions expected to shift to El Niño by mid-2026. Prepare for extended dry spells and elevated heat index levels in Cavite Province.</p>
         </div>
       </div>
-      <div class="advisory-card">
-        <img src="https://briones777.github.io/MDRRMO/images/fireprev.jpg" class="advisory-img" alt="Fire Prevention" onerror="this.src='https://placehold.co/400x140/0a2342/c8a84b?text=Fire+Prevention'" />
-        <div class="advisory-body">
-          <span class="advisory-tag">Safety Bulletin</span>
+      <div class="adv-card">
+        <img src="https://briones777.github.io/MDRRMO/images/fireprev.jpg" class="adv-img" alt="Fire Prevention" onerror="this.src='https://placehold.co/400x140/0a2342/c8a84b?text=Fire+Prevention'" />
+        <div class="adv-body">
+          <span class="adv-tag">Safety Bulletin</span>
           <h4>Fire Prevention Tips</h4>
           <p>Cooking safety: remain in kitchen while frying or broiling. Do not overload sockets. Keep fire extinguishers accessible in all households.</p>
         </div>
       </div>
-      <div class="advisory-card">
-        <img src="https://briones777.github.io/MDRRMO/images/preparedness.jpg" class="advisory-img" alt="Preparedness" onerror="this.src='https://placehold.co/400x140/0a2342/c8a84b?text=Preparedness'" />
-        <div class="advisory-body">
-          <span class="advisory-tag">DRRM Bulletin</span>
+      <div class="adv-card">
+        <img src="https://briones777.github.io/MDRRMO/images/preparedness.jpg" class="adv-img" alt="Preparedness" onerror="this.src='https://placehold.co/400x140/0a2342/c8a84b?text=Preparedness'" />
+        <div class="adv-body">
+          <span class="adv-tag">DRRM Bulletin</span>
           <h4>Emergency Preparedness</h4>
           <p>Assemble a 72-hour supply kit (water, food, radio, medicines). Establish a family communication plan. Identify evacuation routes in your barangay.</p>
         </div>
@@ -1191,12 +952,12 @@
   </div>
 
   <!-- INCIDENTS TABLE -->
-  <div class="table-card" id="incidents">
-    <div class="table-card-header">
+  <div class="tcard" id="incidents">
+    <div class="thdr">
       <h3>Incident Log</h3>
-      <span class="timestamp" id="incident-time">—</span>
+      <span class="ts" id="incident-time">—</span>
     </div>
-    <div style="overflow-x:auto;">
+    <div class="table-scroll">
       <table>
         <thead>
           <tr>
@@ -1216,7 +977,7 @@
             <td>2026-05-10 06:30</td>
             <td>Knee-deep flooding on national road</td>
             <td>Deployed response team; coordinated with DPWH</td>
-            <td><span class="status-badge badge-resolved">Resolved</span></td>
+            <td><span class="sbadge sb-resolved">Resolved</span></td>
             <td>Team Alpha</td>
           </tr>
           <tr>
@@ -1225,7 +986,7 @@
             <td>2026-05-10 08:15</td>
             <td>2-vehicle collision; 1 injured</td>
             <td>First aid administered; patient transported to RHU</td>
-            <td><span class="status-badge badge-resolved">Resolved</span></td>
+            <td><span class="sbadge sb-resolved">Resolved</span></td>
             <td>EMR Unit 2</td>
           </tr>
           <tr>
@@ -1234,7 +995,7 @@
             <td>2026-05-10 10:02</td>
             <td>Heat exhaustion case reported</td>
             <td>Emergency transport; cooling protocol applied</td>
-            <td><span class="status-badge badge-active">Active</span></td>
+            <td><span class="sbadge sb-active">Active</span></td>
             <td>Team Bravo</td>
           </tr>
         </tbody>
@@ -1244,93 +1005,93 @@
 
   <!-- ANNOUNCEMENTS + HOTLINES -->
   <div class="info-row" id="announcements">
-    <div class="info-card">
-      <div class="info-card-header"><h3>Announcements &amp; Schedule</h3></div>
+    <div class="icard">
+      <div class="icard-hdr"><h3>Announcements &amp; Schedule</h3></div>
       <div class="info-card-body">
-        <div class="announce-item">
-          <div class="announce-date">Apr 10, 2026</div>
-          <div class="announce-content">
+        <div class="ann-item">
+          <div class="ann-date">Apr 10, 2026</div>
+          <div >
             <span class="announce-tag tag-sched">Schedule</span>
-            <h5>Earthquake Drill — Barangay Hall</h5>
+            <div class="ann-h5">Earthquake Drill — Barangay Hall</div>
             <p>Mandatory participation for all barangay officials and residents.</p>
           </div>
         </div>
-        <div class="announce-item">
-          <div class="announce-date">Apr 15, 2026</div>
-          <div class="announce-content">
+        <div class="ann-item">
+          <div class="ann-date">Apr 15, 2026</div>
+          <div >
             <span class="announce-tag tag-sched">Schedule</span>
-            <h5>First Aid Training — Covered Court</h5>
+            <div class="ann-h5">First Aid Training — Covered Court</div>
             <p>MDRRMO-certified training open to all community volunteers.</p>
           </div>
         </div>
-        <div class="announce-item">
-          <div class="announce-date">Apr 20, 2026</div>
-          <div class="announce-content">
+        <div class="ann-item">
+          <div class="ann-date">Apr 20, 2026</div>
+          <div >
             <span class="announce-tag tag-sched">Schedule</span>
-            <h5>Flood Preparedness Seminar</h5>
+            <div class="ann-h5">Flood Preparedness Seminar</div>
             <p>Evacuation route briefing and community flood response protocols.</p>
           </div>
         </div>
-        <div class="announce-item">
-          <div class="announce-date">May 10, 2026</div>
-          <div class="announce-content">
+        <div class="ann-item">
+          <div class="ann-date">May 10, 2026</div>
+          <div >
             <span class="announce-tag tag-news">News</span>
-            <h5>MDRRMO Conducts Rescue Training</h5>
+            <div class="ann-h5">MDRRMO Conducts Rescue Training</div>
             <p>Strengthening emergency response capabilities for all duty teams.</p>
           </div>
         </div>
-        <div class="announce-item">
-          <div class="announce-date">May 8, 2026</div>
-          <div class="announce-content">
+        <div class="ann-item">
+          <div class="ann-date">May 8, 2026</div>
+          <div >
             <span class="announce-tag tag-advisory">Advisory</span>
-            <h5>Heavy Rain Warning Issued</h5>
+            <div class="ann-h5">Heavy Rain Warning Issued</div>
             <p>Possible flooding in low-lying areas. Residents advised to stay alert.</p>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="info-card" id="hotlines">
-      <div class="info-card-header"><h3>Emergency Hotlines — Rosario, Cavite</h3></div>
-      <div class="hotline-grid">
-        <a class="hotline-item" href="tel:09123456789">
-          <div class="hotline-icon">📞</div>
-          <div class="hotline-text">
+    <div class="icard" id="hotlines">
+      <div class="icard-hdr"><h3>Emergency Hotlines — Rosario, Cavite</h3></div>
+      <div class="hl-grid">
+        <a class="hl-item" href="tel:09123456789">
+          <div class="hl-ico">📞</div>
+          <div class="hl-text">
             <div class="org">MDRRMO Rosario</div>
             <div class="num">0912-345-6789</div>
           </div>
         </a>
-        <a class="hotline-item" href="tel:09123456789">
-          <div class="hotline-icon">🏥</div>
-          <div class="hotline-text">
+        <a class="hl-item" href="tel:09123456789">
+          <div class="hl-ico">🏥</div>
+          <div class="hl-text">
             <div class="org">RHU Rosario</div>
             <div class="num">0912-345-6789</div>
           </div>
         </a>
-        <a class="hotline-item" href="tel:09123456789">
-          <div class="hotline-icon">🚒</div>
-          <div class="hotline-text">
+        <a class="hl-item" href="tel:09123456789">
+          <div class="hl-ico">🚒</div>
+          <div class="hl-text">
             <div class="org">BFP Rosario</div>
             <div class="num">0912-345-6789</div>
           </div>
         </a>
-        <a class="hotline-item" href="tel:09123456789">
-          <div class="hotline-icon">🚓</div>
-          <div class="hotline-text">
+        <a class="hl-item" href="tel:09123456789">
+          <div class="hl-ico">🚓</div>
+          <div class="hl-text">
             <div class="org">PNP Rosario</div>
             <div class="num">0912-345-6789</div>
           </div>
         </a>
-        <a class="hotline-item" href="tel:143">
-          <div class="hotline-icon">⛑</div>
-          <div class="hotline-text">
+        <a class="hl-item" href="tel:143">
+          <div class="hl-ico">⛑</div>
+          <div class="hl-text">
             <div class="org">Philippine Red Cross</div>
             <div class="num">143</div>
           </div>
         </a>
-        <a class="hotline-item" href="tel:911">
-          <div class="hotline-icon">🚨</div>
-          <div class="hotline-text">
+        <a class="hl-item" href="tel:911">
+          <div class="hl-ico">🚨</div>
+          <div class="hl-text">
             <div class="org">National Emergency</div>
             <div class="num">911</div>
           </div>
@@ -1343,8 +1104,8 @@
   </div>
 
   <!-- FIRST AID -->
-  <div class="first-aid-panel">
-    <div class="fa-header">
+  <div class="fa-card">
+    <div class="fa-hdr">
       <h3>First Aid Quick Reference</h3>
       <span class="fa-badge">AI-Assisted</span>
     </div>
@@ -1362,34 +1123,34 @@
       <button class="fa-btn"><span class="fa-emoji">⚠️</span>Seizure</button>
       <button class="fa-btn"><span class="fa-emoji">🌊</span>Drowned</button>
     </div>
-    <div id="fa-output" style="display:none;padding:14px;border-top:1px solid var(--border);background:var(--gov-gray-100);font-size:12px;line-height:1.8;color:var(--text);">
+    <div id="fa-out" style="display:none;padding:14px;border-top:1px solid var(--border);background:var(--gov-gray-100);font-size:12px;line-height:1.8;color:var(--text);">
     </div>
   </div>
 
   <!-- MISSION VISION -->
   <div class="mvv-grid">
     <div class="mvv-card">
-      <div class="mvv-icon">🎯</div>
+      <div class="micon">🎯</div>
       <h4>Mission</h4>
       <p>To protect lives, property, and the environment through effective disaster risk reduction, preparedness, response, and recovery programs — ensuring community resilience and safety at all times.</p>
     </div>
     <div class="mvv-card">
-      <div class="mvv-icon">🔭</div>
+      <div class="micon">🔭</div>
       <h4>Vision</h4>
       <p>A disaster-resilient community with empowered citizens, capable institutions, and sustainable development practices that minimize risks, hazards, and vulnerabilities across all barangays.</p>
     </div>
   </div>
 
   <!-- PARTNER AGENCIES -->
-  <div class="partners-bar">
-    <div class="partners-label">Partner Agencies &amp; Offices</div>
+  <div class="partners">
+    <div class="partners-lbl">Partner Agencies &amp; Offices</div>
     <div class="partners-logos">
-      <img class="partner-logo" src="https://briones777.github.io/MDRRMO/images/pnp.jpg" alt="PNP" />
-      <img class="partner-logo" src="https://briones777.github.io/MDRRMO/images/bfp.PNG" alt="BFP" />
-      <img class="partner-logo" src="https://briones777.github.io/MDRRMO/images/redcross.jpg" alt="Red Cross" />
-      <img class="partner-logo" src="https://briones777.github.io/MDRRMO/images/mdr.PNG" alt="MDRRMO" />
-      <img class="partner-logo" src="https://briones777.github.io/MDRRMO/images/ocd.png" alt="OCD" />
-      <img class="partner-logo" src="https://briones777.github.io/MDRRMO/images/MunicipalityRosario-logo.png" alt="Municipality of Rosario" />
+      <img class="plogo" src="https://briones777.github.io/MDRRMO/images/pnp.jpg" alt="PNP" />
+      <img class="plogo" src="https://briones777.github.io/MDRRMO/images/bfp.PNG" alt="BFP" />
+      <img class="plogo" src="https://briones777.github.io/MDRRMO/images/redcross.jpg" alt="Red Cross" />
+      <img class="plogo" src="https://briones777.github.io/MDRRMO/images/mdr.PNG" alt="MDRRMO" />
+      <img class="plogo" src="https://briones777.github.io/MDRRMO/images/ocd.png" alt="OCD" />
+      <img class="plogo" src="https://briones777.github.io/MDRRMO/images/MunicipalityRosario-logo.png" alt="Municipality of Rosario" />
     </div>
   </div>
 
@@ -1397,34 +1158,34 @@
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-col">
-        <h5>MDRRMO — Rosario, Cavite</h5>
+  <div class="fi">
+    <div class="ftop">
+      <div class="fcol">
+        <div class="ann-h5">MDRRMO — Rosario, Cavite</div>
         <p>Municipal Disaster Risk Reduction and Management Office<br>
         Rosario Municipal Hall Compound<br>
         Rosario, Cavite, Philippines 4106</p>
       </div>
-      <div class="footer-col">
-        <h5>Quick Links</h5>
+      <div class="fcol">
+        <div class="ann-h5">Quick Links</div>
         <a href="#">Home</a>
         <a href="#">Gallery</a>
         <a href="#">Advisories</a>
         <a href="#">Incidents</a>
         <a href="#">Contact Us</a>
       </div>
-      <div class="footer-col">
-        <h5>Government Links</h5>
+      <div class="fcol">
+        <div class="ann-h5">Government Links</div>
         <a href="https://www.ndrrmc.gov.ph/" target="_blank">NDRRMC</a>
         <a href="https://www.pagasa.dost.gov.ph/" target="_blank">PAGASA</a>
         <a href="https://www.emb.gov.ph/" target="_blank">EMB-DENR</a>
         <a href="https://www.dilg.gov.ph/" target="_blank">DILG</a>
       </div>
     </div>
-    <hr class="footer-divider" />
-    <div class="footer-bottom">
+    <hr class="fdivider" />
+    <div class="fbot">
       <span>© 2026 MDRRMO Rosario, Cavite — All Rights Reserved. Official Government Website.</span>
-      <span class="gov-notice">Republic of the Philippines · Province of Cavite</span>
+      <span class="fn">Republic of the Philippines · Province of Cavite</span>
     </div>
   </div>
 </footer>
