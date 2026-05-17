@@ -115,25 +115,25 @@
   /* Seals — perfectly circular on every device */
   .seal-wrap {
     flex-shrink: 0;
-    width: 64px; height: 64px;     /* fixed square bounding box */
+    width: 64px; height: 64px;
   }
   .seal-wrap .seal-circle {
     width: 64px; height: 64px;
-    border-radius: 50%;             /* always 50% of equal w/h = circle */
+    border-radius: 50%;
     background: var(--bg3);
     border: 2px solid var(--g1);
     display: flex; align-items: center; justify-content: center;
     overflow: hidden;
   }
+  /* secondary seal — same size as primary, same border */
   .seal-wrap .seal-circle.secondary {
-    border-color: var(--border-bright);
-    width: 54px; height: 54px;
-    margin: 5px auto 5px;           /* center inside 64px bounding box */
+    width: 64px; height: 64px;
+    border-color: var(--g1);
+    margin: 0;
   }
   .seal-wrap .seal-circle img {
     width: 100%; height: 100%;
     object-fit: contain;
-    border-radius: 0;               /* img itself not rounded — container clips it */
   }
 
   .hdr-divider {
@@ -186,7 +186,7 @@
     .header-inner { flex-wrap: wrap; justify-content: center; gap: 10px; }
     .seal-wrap { width: 52px; height: 52px; }
     .seal-wrap .seal-circle { width: 52px; height: 52px; }
-    .seal-wrap .seal-circle.secondary { width: 44px; height: 44px; margin: 4px auto; }
+    .seal-wrap .seal-circle.secondary { width: 52px; height: 52px; margin: 0; }
     .hdr-divider { display: none; }
     .hdr-title { width: 100%; text-align: center; order: 3; }
     .hdr-title h1 { white-space: normal; text-align: center; }
