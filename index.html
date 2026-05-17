@@ -663,7 +663,7 @@
       </div>
       <div class="stile c-green">
         <div class="sl">Active Responders</div>
-        <div class="sv" style="color:var(--gov-green-light)">12</div>
+        <div class="sv" style="color:var(--g1)">12</div>
         <div class="su">on duty</div>
       </div>
       <div class="stile">
@@ -683,7 +683,7 @@
       </div>
       <div class="stile c-green">
         <div class="sl">Avg. Response Time</div>
-        <div class="sv" style="color:var(--gov-green-light);font-size:22px">5 min</div>
+        <div class="sv" style="color:var(--g1);font-size:20px">5 min</div>
         <div class="su">last 30 days</div>
       </div>
     </div>
@@ -693,180 +693,159 @@
   <div class="section" id="weather">
     <div class="shdr">
       <div class="shdr-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 3a9 9 0 0 1 9 9H3a9 9 0 0 1 9-9z"/><path d="M3 14h18M7 19h10"/></svg>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
       </div>
       <div>
         <h2>Environmental Monitoring</h2>
-        <div class="ssub">Real-time conditions · Rosario, Cavite</div>
+        <div class="ssub">Live data · Rosario, Cavite (14.416°N, 120.850°E)</div>
       </div>
-      <div class="sright" id="env-updated">Updated —</div>
+      <div class="sright" id="env-updated">Fetching…</div>
     </div>
 
     <div class="env-grid">
 
-      <!-- HEAT INDEX -->
+      <!-- ── HEAT INDEX ── -->
       <div class="ecard">
         <div class="ecard-hdr">
-          <div class="dot"></div>
-          <h3>Heat Index Monitor</h3>
+          <h3>🌡 Heat Index</h3>
+          <div class="live-dot"></div>
         </div>
         <div class="ecard-body">
-          <div class="heat-main">
-            <span class="heat-val" id="heat-val">38</span>
-            <span class="heat-unit">°C</span>
+          <div class="hi-top">
+            <span class="hi-val" id="hi-val">—</span>
+            <span class="hi-unit">°C</span>
           </div>
-          <div>
-            <span class="heat-label caution" id="heat-label">Caution</span>
+          <div class="hi-feels" id="hi-feels">Fetching Rosario, Cavite data…</div>
+          <span class="hi-pill pill-caution" id="hi-pill">Loading</span>
+
+          <div class="hi-scale">
+            <span class="hs1"></span><span class="hs2"></span>
+            <span class="hs3"></span><span class="hs4"></span><span class="hs5"></span>
           </div>
-          <div class="heat-scale">
-            <span class="s1"></span><span class="s2"></span><span class="s3"></span><span class="s4"></span><span class="s5"></span>
+          <div class="hi-scale-lbl">
+            <span>≤27 Safe</span><span>28–32 Caution</span>
+            <span>33–41 Danger</span><span>42+ Extreme</span>
           </div>
-          <div class="heat-scale-labels">
-            <span>Safe</span><span>Caution</span><span>Danger</span><span>Extreme</span>
-          </div>
-          <div class="heat-meta">
-            <div class="heat-meta-item">
-              <strong id="temp-actual">34°C</strong>
-              Ambient Temp
+
+          <div class="hi-meta">
+            <div class="hm-item">
+              <div class="hm-lbl">Ambient Temp</div>
+              <div class="hm-val" id="hi-temp">—°C</div>
             </div>
-            <div class="heat-meta-item">
-              <strong id="humidity-val">72%</strong>
-              Relative Humidity
+            <div class="hm-item">
+              <div class="hm-lbl">Rel. Humidity</div>
+              <div class="hm-val" id="hi-rh">—%</div>
             </div>
-            <div class="heat-meta-item">
-              <strong>10:00–16:00</strong>
-              Peak Hours
+            <div class="hm-item">
+              <div class="hm-lbl">Wind Speed</div>
+              <div class="hm-val" id="hi-wind">— km/h</div>
             </div>
-            <div class="heat-meta-item">
-              <strong id="uv-index">UV 9 — Very High</strong>
-              UV Index
+            <div class="hm-item">
+              <div class="hm-lbl">UV Index</div>
+              <div class="hm-val" id="hi-uv">—</div>
             </div>
           </div>
-          <div style="margin-top:12px; padding:8px; background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); border-radius:2px; font-size:11px; color:#fcd34d; line-height:1.5;">
-            ⚠ PAGASA Advisory: Avoid strenuous outdoor activities. Drink water regularly. Seek shade or air-conditioned areas.
-          </div>
+          <div class="hi-warn" id="hi-warn">Loading advisory…</div>
         </div>
       </div>
 
-      <!-- AIR QUALITY -->
+      <!-- ── AIR QUALITY ── -->
       <div class="ecard">
         <div class="ecard-hdr">
-          <div class="dot"></div>
-          <h3>Air Quality Index (AQI)</h3>
+          <h3>💨 Air Quality Index</h3>
+          <div class="live-dot"></div>
         </div>
         <div class="ecard-body">
-          <div class="aqi-main">
-            <div class="aqi-ring-wrap">
-              <svg width="110" height="110" viewBox="0 0 110 110">
-                <circle cx="55" cy="55" r="44" fill="none" stroke="#1a3826" stroke-width="10"/>
-                <circle cx="55" cy="55" r="44" fill="none" stroke="#facc15" stroke-width="10"
-                  stroke-dasharray="276.4" stroke-dashoffset="165.8"
-                  stroke-linecap="round" transform="rotate(-90 55 55)"/>
+          <div class="aqi-wrap">
+            <div class="aqi-gauge">
+              <svg width="120" height="120" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="48" fill="none" stroke="#163320" stroke-width="11"/>
+                <circle id="aqi-arc" cx="60" cy="60" r="48" fill="none" stroke="#34d058"
+                  stroke-width="11" stroke-dasharray="301.6" stroke-dashoffset="301.6"
+                  stroke-linecap="round" transform="rotate(-90 60 60)"/>
               </svg>
               <div class="aqi-center">
-                <div class="aqi-num">78</div>
-                <div class="aqi-label-small">AQI</div>
+                <div class="aqi-num" id="aqi-num">—</div>
+                <div class="aqi-sub">AQI</div>
               </div>
             </div>
-            <br/>
-            <span class="aqi-status moderate">Moderate</span>
+            <span class="aqi-pill aqi-good" id="aqi-pill">Loading</span>
           </div>
-          <div class="aqi-pollutants">
-            <div class="aqi-poll-item">
-              <div class="name">PM2.5</div>
-              <div class="value">28 µg/m³</div>
-              <div class="aqi-bar"><div class="aqi-bar-fill" style="width:56%;background:#facc15;"></div></div>
+
+          <div class="poll-grid">
+            <div class="poll-item">
+              <div class="pn">PM2.5</div>
+              <div class="pv" id="pm25">—</div>
+              <div class="pbar"><div class="pbar-fill" id="pm25-bar" style="width:0%;background:var(--g1)"></div></div>
             </div>
-            <div class="aqi-poll-item">
-              <div class="name">PM10</div>
-              <div class="value">45 µg/m³</div>
-              <div class="aqi-bar"><div class="aqi-bar-fill" style="width:45%;background:#86efac;"></div></div>
+            <div class="poll-item">
+              <div class="pn">PM10</div>
+              <div class="pv" id="pm10">—</div>
+              <div class="pbar"><div class="pbar-fill" id="pm10-bar" style="width:0%;background:var(--g1)"></div></div>
             </div>
-            <div class="aqi-poll-item">
-              <div class="name">CO</div>
-              <div class="value">0.8 ppm</div>
-              <div class="aqi-bar"><div class="aqi-bar-fill" style="width:20%;background:#86efac;"></div></div>
+            <div class="poll-item">
+              <div class="pn">CO (ppb)</div>
+              <div class="pv" id="co">—</div>
+              <div class="pbar"><div class="pbar-fill" id="co-bar" style="width:0%;background:var(--g1)"></div></div>
             </div>
-            <div class="aqi-poll-item">
-              <div class="name">O₃ (Ozone)</div>
-              <div class="value">52 µg/m³</div>
-              <div class="aqi-bar"><div class="aqi-bar-fill" style="width:52%;background:#facc15;"></div></div>
+            <div class="poll-item">
+              <div class="pn">O₃ Ozone</div>
+              <div class="pv" id="o3">—</div>
+              <div class="pbar"><div class="pbar-fill" id="o3-bar" style="width:0%;background:var(--amber)"></div></div>
             </div>
-            <div class="aqi-poll-item">
-              <div class="name">NO₂</div>
-              <div class="value">18 µg/m³</div>
-              <div class="aqi-bar"><div class="aqi-bar-fill" style="width:18%;background:#86efac;"></div></div>
+            <div class="poll-item">
+              <div class="pn">NO₂</div>
+              <div class="pv" id="no2">—</div>
+              <div class="pbar"><div class="pbar-fill" id="no2-bar" style="width:0%;background:var(--g1)"></div></div>
             </div>
-            <div class="aqi-poll-item">
-              <div class="name">SO₂</div>
-              <div class="value">5 µg/m³</div>
-              <div class="aqi-bar"><div class="aqi-bar-fill" style="width:5%;background:#86efac;"></div></div>
+            <div class="poll-item">
+              <div class="pn">SO₂</div>
+              <div class="pv" id="so2">—</div>
+              <div class="pbar"><div class="pbar-fill" id="so2-bar" style="width:0%;background:var(--g1)"></div></div>
             </div>
           </div>
-          <div style="margin-top:12px; padding:8px; background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.25); border-radius:2px; font-size:11px; color:#fcd34d; line-height:1.5;">
-            ⚠ Sensitive groups (asthma, elderly, children) should limit prolonged outdoor exposure.
+          <div class="aqi-src">Source: Open-Meteo · Rosario, Cavite</div>
+        </div>
+      </div>
+
+      <!-- ── PAGASA ALERTS ── -->
+      <div class="ecard">
+        <div class="ecard-hdr">
+          <h3>🛡 PAGASA Alert System</h3>
+          <div class="live-dot"></div>
+        </div>
+        <div class="ecard-body">
+          <div class="wc-grid">
+            <div class="wc-item">
+              <div class="wcl">Rainfall</div>
+              <div class="wcv" id="pag-rain">— mm</div>
+              <div class="wcs">last 24 hrs</div>
+            </div>
+            <div class="wc-item">
+              <div class="wcl">Wind</div>
+              <div class="wcv" id="pag-wind">— km/h</div>
+              <div class="wcs" id="pag-wdir">—</div>
+            </div>
+            <div class="wc-item">
+              <div class="wcl">Pressure</div>
+              <div class="wcv" id="pag-pres">— hPa</div>
+              <div class="wcs" id="pag-pres-s">—</div>
+            </div>
+            <div class="wc-item">
+              <div class="wcl">Visibility</div>
+              <div class="wcv">~8 km</div>
+              <div class="wcs">approx.</div>
+            </div>
+          </div>
+          <div class="pag-list" id="pag-list">
+            <div class="pag-row pg"><span class="prt">Loading alerts…</span><span class="prs">—</span></div>
+          </div>
+          <div style="margin-top:10px;font-size:9px;color:var(--t-dim);text-align:right">
+            Source: Open-Meteo · PAGASA standards
           </div>
         </div>
       </div>
 
-      <!-- PAGASA ALERTS -->
-      <div class="ecard">
-        <div class="ecard-hdr">
-          <div class="dot"></div>
-          <h3>PAGASA Alert System</h3>
-        </div>
-        <div class="ecard-body">
-          <div class="weather-conditions">
-            <div class="wc-item">
-              <div class="wc-label">Rainfall</div>
-              <div class="wc-val">12 mm</div>
-              <div class="wc-sub">last 24 hrs</div>
-            </div>
-            <div class="wc-item">
-              <div class="wc-label">Wind Speed</div>
-              <div class="wc-val">18 km/h</div>
-              <div class="wc-sub">NE direction</div>
-            </div>
-            <div class="wc-item">
-              <div class="wc-label">Visibility</div>
-              <div class="wc-val">8 km</div>
-              <div class="wc-sub">good</div>
-            </div>
-            <div class="wc-item">
-              <div class="wc-label">Pressure</div>
-              <div class="wc-val">1009 hPa</div>
-              <div class="wc-sub">stable</div>
-            </div>
-          </div>
-          <div class="pagasa-alerts">
-            <div class="pagasa-alert yellow">
-              <span class="pa-type">Rainfall Warning</span>
-              <span class="pa-status">Yellow Alert</span>
-            </div>
-            <div class="pagasa-alert yellow">
-              <span class="pa-type">Heat Index</span>
-              <span class="pa-status">Caution Level</span>
-            </div>
-            <div class="pagasa-alert green">
-              <span class="pa-type">Wind Condition</span>
-              <span class="pa-status">Normal</span>
-            </div>
-            <div class="pagasa-alert green">
-              <span class="pa-type">Storm Signal</span>
-              <span class="pa-status">No Signal</span>
-            </div>
-            <div class="pagasa-alert yellow">
-              <span class="pa-type">Air Quality</span>
-              <span class="pa-status">Moderate</span>
-            </div>
-            <div class="pagasa-alert green">
-              <span class="pa-type">Flood Risk</span>
-              <span class="pa-status">Low</span>
-            </div>
-          </div>
-          <div style="margin-top:10px; font-size:10px; color:var(--text-muted); text-align:right;">Source: PAGASA / EMB-CALABARZON</div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -891,24 +870,24 @@
       </div>
       <div class="mpanel">
         <img src="https://briones777.github.io/MDRRMO/images/mdr-bldg.jpg" alt="MDRRMO Building" style="width:100%;height:160px;object-fit:cover;border-radius:2px;margin-bottom:12px;" onerror="this.style.display='none'" />
-        <p style="font-size:12px;color:var(--text-muted);line-height:1.7;margin-bottom:10px;">
+        <p style="font-size:12px;color:var(--t-body);line-height:1.7;margin-bottom:10px;">
           The MDRRMO ensures disaster preparedness, response, and recovery operations across the municipality. It protects lives through coordinated emergency systems and community resilience programs.
         </p>
-        <p style="font-size:12px;color:var(--text-muted);line-height:1.7;">
+        <p style="font-size:12px;color:var(--t-body);line-height:1.7;">
           Through training, rescue operations, and public awareness campaigns, the office strengthens rapid emergency response capacity.
         </p>
-        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:12px;">
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border-dim);display:flex;gap:12px;">
           <div style="flex:1;text-align:center;">
             <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;color:#4ade80;">24/7</div>
-            <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;">Operations</div>
+            <div style="font-size:10px;color:var(--t-body);text-transform:uppercase;letter-spacing:0.06em;">Operations</div>
           </div>
           <div style="flex:1;text-align:center;">
             <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;color:#4ade80;">33</div>
-            <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;">Barangays</div>
+            <div style="font-size:10px;color:var(--t-body);text-transform:uppercase;letter-spacing:0.06em;">Barangays</div>
           </div>
           <div style="flex:1;text-align:center;">
             <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;color:#4ade80;">6+</div>
-            <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;">Agencies</div>
+            <div style="font-size:10px;color:var(--t-body);text-transform:uppercase;letter-spacing:0.06em;">Agencies</div>
           </div>
         </div>
       </div>
@@ -1123,7 +1102,7 @@
       <button class="fa-btn"><span class="fa-emoji">⚠️</span>Seizure</button>
       <button class="fa-btn"><span class="fa-emoji">🌊</span>Drowned</button>
     </div>
-    <div id="fa-out" style="display:none;padding:14px;border-top:1px solid var(--border);background:var(--gov-gray-100);font-size:12px;line-height:1.8;color:var(--text);">
+    <div id="fa-out">
     </div>
   </div>
 
@@ -1232,7 +1211,7 @@
     'Seizure': '1. Clear area of hazards. 2. Cushion the head. 3. Do NOT restrain. 4. Turn on side when seizure ends. 5. Call 911 if seizure lasts >5 minutes.',
     'Drowned': '1. Remove from water safely. 2. Check responsiveness and breathing. 3. Begin CPR if not breathing. 4. Call 911. 5. Keep warm until help arrives.'
   };
-  const faOut = document.getElementById('fa-output');
+  const faOut = document.getElementById('fa-out');
   document.querySelectorAll('.fa-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const key = btn.textContent.replace(/[\u{1F000}-\u{1FFFF}]/gu,'').trim();
