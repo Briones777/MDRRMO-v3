@@ -8,27 +8,27 @@
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --gov-navy: #0a2342;
-    --gov-navy-mid: #15376b;
-    --gov-navy-light: #1f4e8c;
-    --gov-gold: #c8a84b;
-    --gov-gold-light: #e8c97a;
+    --gov-navy: #0b1f0f;
+    --gov-navy-mid: #122a17;
+    --gov-navy-light: #1a4a24;
+    --gov-gold: #4ade80;
+    --gov-gold-light: #86efac;
     --gov-red: #9b1c1c;
     --gov-red-light: #dc2626;
     --gov-green: #14532d;
     --gov-green-light: #16a34a;
     --gov-amber: #78350f;
     --gov-amber-light: #d97706;
-    --gov-gray-100: #f3f4f6;
-    --gov-gray-200: #e5e7eb;
+    --gov-gray-100: #122a17;
+    --gov-gray-200: #1a3826;
     --gov-gray-400: #9ca3af;
     --gov-gray-600: #4b5563;
     --gov-gray-800: #1f2937;
-    --text: #0f172a;
-    --text-muted: #475569;
-    --border: #cbd5e1;
-    --surface: #f8fafc;
-    --white: #ffffff;
+    --text: #e2ffe9;
+    --text-muted: #7aab8a;
+    --border: #1f4a30;
+    --surface: #0b1a12;
+    --white: #0d1f12;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -48,7 +48,7 @@
     font-size: 11px;
     letter-spacing: 0.04em;
     padding: 6px 0;
-    border-bottom: 2px solid var(--gov-gold);
+    border-bottom: 1px solid var(--gov-gold);
   }
   .top-banner .inner {
     max-width: 1200px;
@@ -84,7 +84,7 @@
     width: 72px;
     height: 72px;
     border-radius: 50%;
-    background: var(--white);
+    background: #0d1f12;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -123,7 +123,7 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: var(--white);
+    background: #0d1f12;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -198,9 +198,9 @@
 
   /* ── ALERT STRIP ── */
   .alert-strip {
-    background: #fef3c7;
-    border-top: 3px solid var(--gov-amber-light);
-    border-bottom: 1px solid #fde68a;
+    background: rgba(245,158,11,0.08);
+    border-top: 3px solid rgba(245,158,11,0.5);
+    border-bottom: 1px solid rgba(245,158,11,0.2);
     padding: 8px 0;
   }
   .alert-strip .inner {
@@ -260,7 +260,7 @@
     font-family: 'Source Serif 4', serif;
     font-size: 16px;
     font-weight: 700;
-    color: var(--gov-navy);
+    color: #4ade80;
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
@@ -284,7 +284,7 @@
   }
   @media (max-width: 900px) { .status-grid { grid-template-columns: repeat(3, 1fr); } }
   .stat-tile {
-    background: var(--white);
+    background: #0d1f12;
     border: 1px solid var(--border);
     border-top: 4px solid var(--gov-navy);
     padding: 14px 12px;
@@ -306,7 +306,7 @@
     font-family: 'IBM Plex Mono', monospace;
     font-size: 28px;
     font-weight: 700;
-    color: var(--gov-navy);
+    color: var(--gov-gold);
     line-height: 1;
     margin-bottom: 4px;
   }
@@ -322,7 +322,7 @@
   }
   @media (max-width: 900px) { .env-grid { grid-template-columns: 1fr; } }
   .env-card {
-    background: var(--white);
+    background: #0d1f12;
     border: 1px solid var(--border);
     border-radius: 2px;
     overflow: hidden;
@@ -374,9 +374,9 @@
     text-transform: uppercase;
     margin-bottom: 12px;
   }
-  .heat-label.caution { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
-  .heat-label.danger { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-  .heat-label.safe { background: #dcfce7; color: #14532d; border: 1px solid #bbf7d0; }
+  .heat-label.caution { background: rgba(245,158,11,0.12); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+  .heat-label.danger { background: rgba(239,68,68,0.12); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+  .heat-label.safe { background: rgba(34,197,94,0.1); color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
   .heat-label.extreme { background: #7f1d1d; color: white; }
   .heat-scale {
     display: flex;
@@ -421,7 +421,7 @@
     font-family: 'IBM Plex Mono', monospace;
     font-size: 30px;
     font-weight: 700;
-    color: var(--gov-navy);
+    color: var(--gov-gold);
     line-height: 1;
   }
   .aqi-label-small { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
@@ -434,8 +434,8 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
   }
-  .aqi-status.moderate { background: #fef9c3; color: #713f12; border: 1px solid #fde68a; }
-  .aqi-status.good { background: #dcfce7; color: #14532d; border: 1px solid #bbf7d0; }
+  .aqi-status.moderate { background: rgba(245,158,11,0.1); color: #fcd34d; border: 1px solid rgba(245,158,11,0.25); }
+  .aqi-status.good { background: rgba(34,197,94,0.1); color: #4ade80; border: 1px solid rgba(34,197,94,0.25); }
   .aqi-pollutants {
     margin-top: 12px;
     display: grid;
@@ -471,14 +471,14 @@
     align-items: center;
     justify-content: space-between;
     padding: 8px 10px;
-    background: var(--gov-gray-100);
+    background: rgba(34,197,94,0.06);
     border-radius: 2px;
     border-left: 3px solid var(--border);
     font-size: 11px;
   }
   .pagasa-alert.green { border-left-color: var(--gov-green-light); }
-  .pagasa-alert.yellow { border-left-color: var(--gov-amber-light); background: #fffbeb; }
-  .pagasa-alert.red { border-left-color: var(--gov-red-light); background: #fff5f5; }
+  .pagasa-alert.yellow { border-left-color: var(--gov-amber-light); background: rgba(245,158,11,0.07); }
+  .pagasa-alert.red { border-left-color: var(--gov-red-light); background: rgba(239,68,68,0.07); }
   .pagasa-alert .pa-type { font-weight: 600; color: var(--text); }
   .pagasa-alert .pa-status { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
   .pagasa-alert.green .pa-status { color: var(--gov-green-light); }
@@ -494,7 +494,7 @@
   }
   @media (max-width: 900px) { .map-row { grid-template-columns: 1fr; } }
   .map-card {
-    background: var(--white);
+    background: #0d1f12;
     border: 1px solid var(--border);
     border-radius: 2px;
     overflow: hidden;
@@ -518,7 +518,7 @@
     background: transparent;
     font-family: 'IBM Plex Sans', sans-serif;
   }
-  .map-tab.active { background: var(--gov-gold); color: var(--gov-navy); font-weight: 600; border-color: var(--gov-gold); }
+  .map-tab.active { background: var(--gov-gold); color: var(--gov-gold); font-weight: 600; border-color: var(--gov-gold); }
   .map-frame { display: block; width: 100%; height: 340px; border: none; }
   .map-panel { padding: 14px; }
 
@@ -531,7 +531,7 @@
   }
   @media (max-width: 900px) { .advisories-grid { grid-template-columns: 1fr; } }
   .advisory-card {
-    background: var(--white);
+    background: #0d1f12;
     border: 1px solid var(--border);
     border-radius: 2px;
     overflow: hidden;
@@ -550,7 +550,7 @@
     color: var(--gov-gold);
     margin-bottom: 6px;
   }
-  .advisory-body h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; color: var(--gov-navy); }
+  .advisory-body h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; color: #86efac; }
   .advisory-body p { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
 
   /* ── ANNOUNCEMENTS + HOTLINES ── */
@@ -562,7 +562,7 @@
   }
   @media (max-width: 700px) { .info-row { grid-template-columns: 1fr; } }
   .info-card {
-    background: var(--white);
+    background: #0d1f12;
     border: 1px solid var(--border);
     border-radius: 2px;
     overflow: hidden;
@@ -600,9 +600,9 @@
     letter-spacing: 0.06em;
     margin-bottom: 2px;
   }
-  .tag-news { background: #dbeafe; color: #1e40af; }
-  .tag-sched { background: #f3e8ff; color: #6b21a8; }
-  .tag-advisory { background: #fef3c7; color: #92400e; }
+  .tag-news { background: rgba(34,197,94,0.12); color: #16a34a; }
+  .tag-sched { background: rgba(74,222,128,0.1); color: #15803d; }
+  .tag-advisory { background: rgba(245,158,11,0.12); color: #fcd34d; }
 
   /* Hotlines */
   .hotline-grid {
@@ -616,7 +616,7 @@
     align-items: center;
     gap: 10px;
     padding: 10px 10px;
-    background: var(--gov-gray-100);
+    background: rgba(34,197,94,0.06);
     border-radius: 2px;
     text-decoration: none;
     border: 1px solid var(--border);
@@ -634,12 +634,12 @@
     flex-shrink: 0;
     font-size: 14px;
   }
-  .hotline-text .org { font-size: 10px; font-weight: 700; color: var(--gov-navy); text-transform: uppercase; letter-spacing: 0.04em; }
-  .hotline-text .num { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; color: var(--gov-navy-light); }
+  .hotline-text .org { font-size: 10px; font-weight: 700; color: var(--gov-gold-light); text-transform: uppercase; letter-spacing: 0.04em; }
+  .hotline-text .num { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; color: #4ade80; }
 
   /* ── INCIDENTS TABLE ── */
   .table-card {
-    background: var(--white);
+    background: #0d1f12;
     border: 1px solid var(--border);
     border-radius: 2px;
     overflow: hidden;
@@ -656,7 +656,7 @@
   .table-card-header .timestamp { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.45); }
   table { width: 100%; border-collapse: collapse; }
   thead th {
-    background: var(--gov-gray-100);
+    background: rgba(34,197,94,0.06);
     padding: 8px 12px;
     text-align: left;
     font-size: 10px;
@@ -673,7 +673,7 @@
     color: var(--text);
   }
   tbody tr:last-child td { border-bottom: none; }
-  tbody tr:hover td { background: var(--gov-gray-100); }
+  tbody tr:hover td { background: rgba(34,197,94,0.06); }
   .status-badge {
     display: inline-block;
     font-size: 9px;
@@ -683,9 +683,9 @@
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
-  .badge-active { background: #fef3c7; color: #92400e; }
-  .badge-resolved { background: #dcfce7; color: #14532d; }
-  .badge-standby { background: #dbeafe; color: #1e40af; }
+  .badge-active { background: rgba(245,158,11,0.12); color: #fcd34d; }
+  .badge-resolved { background: rgba(34,197,94,0.1); color: #4ade80; }
+  .badge-standby { background: rgba(34,197,94,0.12); color: #16a34a; }
 
   /* ── MISSION/VISION ── */
   .mvv-grid {
@@ -696,7 +696,7 @@
   }
   @media (max-width: 700px) { .mvv-grid { grid-template-columns: 1fr; } }
   .mvv-card {
-    background: var(--white);
+    background: #0d1f12;
     border: 1px solid var(--border);
     border-radius: 2px;
     padding: 20px 18px;
@@ -709,18 +709,18 @@
     font-family: 'Source Serif 4', serif;
     font-size: 14px;
     font-weight: 700;
-    color: var(--gov-navy);
+    color: var(--gov-gold);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin-bottom: 10px;
     padding-bottom: 8px;
-    border-bottom: 2px solid var(--gov-gold);
+    border-bottom: 1px solid var(--gov-gold);
   }
   .mvv-card p { font-size: 12px; color: var(--text-muted); line-height: 1.7; }
 
   /* ── PARTNER AGENCIES ── */
   .partners-bar {
-    background: var(--white);
+    background: #0d1f12;
     border: 1px solid var(--border);
     border-radius: 2px;
     padding: 14px 18px;
@@ -793,7 +793,7 @@
 
   /* First aid mini panel */
   .first-aid-panel {
-    background: var(--white);
+    background: #0d1f12;
     border: 1px solid var(--border);
     border-radius: 2px;
     overflow: hidden;
@@ -807,7 +807,7 @@
     gap: 8px;
   }
   .fa-header h3 { font-size: 11px; font-weight: 700; color: white; text-transform: uppercase; letter-spacing: 0.08em; }
-  .fa-header .fa-badge { font-size: 9px; background: white; color: var(--gov-red); padding: 1px 6px; border-radius: 2px; font-weight: 700; }
+  .fa-header .fa-badge { font-size: 9px; background: rgba(239,68,68,0.15); color: #fca5a5; padding: 1px 6px; border-radius: 2px; font-weight: 700; }
   .fa-grid {
     padding: 12px;
     display: grid;
@@ -819,16 +819,16 @@
     padding: 8px 6px;
     border: 1px solid var(--border);
     border-radius: 2px;
-    background: var(--gov-gray-100);
+    background: rgba(34,197,94,0.06);
     text-align: center;
     cursor: pointer;
     font-family: 'IBM Plex Sans', sans-serif;
     font-size: 10px;
     font-weight: 500;
-    color: var(--gov-navy);
+    color: var(--gov-gold);
     transition: background 0.15s;
   }
-  .fa-btn:hover { background: #dbeafe; border-color: #93c5fd; }
+  .fa-btn:hover { background: rgba(34,197,94,0.08); border-color: #22c55e; }
   .fa-emoji { display: block; font-size: 18px; margin-bottom: 2px; }
 </style>
 </head>
@@ -981,7 +981,7 @@
               UV Index
             </div>
           </div>
-          <div style="margin-top:12px; padding:8px; background:#fef9c3; border:1px solid #fde68a; border-radius:2px; font-size:11px; color:#92400e; line-height:1.5;">
+          <div style="margin-top:12px; padding:8px; background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); border-radius:2px; font-size:11px; color:#fcd34d; line-height:1.5;">
             ⚠ PAGASA Advisory: Avoid strenuous outdoor activities. Drink water regularly. Seek shade or air-conditioned areas.
           </div>
         </div>
@@ -997,7 +997,7 @@
           <div class="aqi-main">
             <div class="aqi-ring-wrap">
               <svg width="110" height="110" viewBox="0 0 110 110">
-                <circle cx="55" cy="55" r="44" fill="none" stroke="#e5e7eb" stroke-width="10"/>
+                <circle cx="55" cy="55" r="44" fill="none" stroke="#1a3826" stroke-width="10"/>
                 <circle cx="55" cy="55" r="44" fill="none" stroke="#facc15" stroke-width="10"
                   stroke-dasharray="276.4" stroke-dashoffset="165.8"
                   stroke-linecap="round" transform="rotate(-90 55 55)"/>
@@ -1042,7 +1042,7 @@
               <div class="aqi-bar"><div class="aqi-bar-fill" style="width:5%;background:#86efac;"></div></div>
             </div>
           </div>
-          <div style="margin-top:12px; padding:8px; background:#fefce8; border:1px solid #fde68a; border-radius:2px; font-size:11px; color:#713f12; line-height:1.5;">
+          <div style="margin-top:12px; padding:8px; background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.25); border-radius:2px; font-size:11px; color:#fcd34d; line-height:1.5;">
             ⚠ Sensitive groups (asthma, elderly, children) should limit prolonged outdoor exposure.
           </div>
         </div>
@@ -1138,15 +1138,15 @@
         </p>
         <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);display:flex;gap:12px;">
           <div style="flex:1;text-align:center;">
-            <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;color:var(--gov-navy);">24/7</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;color:#4ade80;">24/7</div>
             <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;">Operations</div>
           </div>
           <div style="flex:1;text-align:center;">
-            <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;color:var(--gov-navy);">33</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;color:#4ade80;">33</div>
             <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;">Barangays</div>
           </div>
           <div style="flex:1;text-align:center;">
-            <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;color:var(--gov-navy);">6+</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:700;color:#4ade80;">6+</div>
             <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;">Agencies</div>
           </div>
         </div>
@@ -1336,7 +1336,7 @@
           </div>
         </a>
       </div>
-      <div style="padding:10px 12px;background:#fff5f5;border-top:1px solid #fecaca;font-size:10px;color:#991b1b;">
+      <div style="padding:10px 12px;background:rgba(239,68,68,0.08);border-top:1px solid rgba(239,68,68,0.2);font-size:10px;color:#fca5a5;">
         ⚠ Tap any number to call immediately. Keep lines available during emergencies.
       </div>
     </div>
@@ -1478,7 +1478,7 @@
       const match = Object.keys(faGuide).find(k => key.toLowerCase().includes(k.toLowerCase()) || k.toLowerCase().includes(key.toLowerCase()));
       if(match) {
         faOut.style.display = 'block';
-        faOut.innerHTML = '<strong style="color:var(--gov-navy);">' + match + ':</strong> ' + faGuide[match];
+        faOut.innerHTML = '<strong style="color:#4ade80;">' + match + ':</strong> ' + faGuide[match];
       }
     });
   });
