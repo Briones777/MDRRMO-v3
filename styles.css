@@ -337,6 +337,60 @@
   }
   .ecard-body { padding: 16px 14px; }
 
+
+.sright{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;          /* allows wrapping on small screens */
+  max-width:100%;
+}
+
+#env-updated{
+  font-size:10px;
+  color:var(--t-dim);
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.refresh-btn{
+  font-size:9px;
+  padding:3px 8px;
+  border-radius:2px;
+  background:rgba(52,208,88,.12);
+  border:1px solid var(--border-mid);
+  color:var(--fg2); /* fixed typo */
+  cursor:pointer;
+  font-family:inherit;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  flex-shrink:0;
+}
+
+/* Mobile optimization */
+@media (max-width:480px){
+
+  .sright{
+    width:100%;
+    justify-content:space-between;
+    gap:6px;
+  }
+
+  #env-updated{
+    flex:1;
+    font-size:9px;
+  }
+
+  .refresh-btn{
+    font-size:8px;
+    padding:3px 6px;
+  }
+}
+
   /* HEAT INDEX */
   .hi-top { display: flex; align-items: baseline; gap: 5px; margin-bottom: 4px; }
   .hi-val { font-family: 'IBM Plex Mono', monospace; font-size: 52px; font-weight: 700; color: var(--t-primary); line-height: 1; }
