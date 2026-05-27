@@ -127,9 +127,12 @@
         <h2>Environmental Monitoring</h2>
         <div class="ssub">Live data · Rosario, Cavite (14.416°N, 120.850°E)</div>
       </div>
-      <div class="sright" style="display:flex;align-items:center;gap:8px;">
-        <span id="env-updated" style="font-size:10px;color:var(--t-dim)">Fetching live data…</span>
-        <button onclick="init()" style="font-size:9px;padding:3px 8px;border-radius:2px;background:rgba(52,208,88,.12);border:1px solid var(--border-mid);color:var(--g2);cursor:pointer;font-family:inherit;font-weight:700;text-transform:uppercase;letter-spacing:.06em;">↺ Refresh</button>
+     <div class="sright">
+        <span id="env-updated">Fetching live data…</span>
+      
+        <button onclick="init()" class="refresh-btn">
+          ↺ Refresh
+        </button>
       </div>
     </div>
 
